@@ -1,0 +1,1984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miami Wow Tours Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6f2;--surface:#fff;--border:rgba(0,0,0,0.1);--border-strong:rgba(0,0,0,0.18);--text:#1a1a1a;--text2:#666;--text3:#999;--teal:#0f6e56;--teal-l:#e1f5ee;--teal-m:#1d9e75;--amber:#ba7517;--amber-l:#faeeda;--blue:#185fa5;--blue-l:#e6f1fb;--purple:#534ab7;--purple-l:#eeedfe;--coral:#d85a30;--coral-l:#faece7;--red:#a32d2d;--red-l:#fcebeb;--r:10px;--rs:6px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh;}
+.topbar{background:#0a1628;color:#fff;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;}
+.topbar-brand{font-size:14px;font-weight:600;letter-spacing:.04em;}
+.topbar-brand span{color:#4dd9a8;}
+.topbar-year{font-size:12px;color:rgba(255,255,255,.45);font-family:'DM Mono',monospace;}
+.topbar button{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);padding:5px 12px;border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.nav-bar{background:var(--surface);border-bottom:1px solid var(--border);display:flex;padding:0 1.5rem;gap:4px;flex-wrap:wrap;}
+.nav-btn{padding:12px 14px;font-size:13px;font-weight:500;color:var(--text2);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+.nav-btn:hover{color:var(--text);}
+.nav-btn.active{color:var(--teal-m);border-bottom-color:var(--teal-m);}
+.main{max-width:1100px;margin:0 auto;padding:1.5rem;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem;}
+.card-title{font-size:14px;font-weight:600;margin-bottom:1rem;}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1.25rem;}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;}
+.metric-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px;}
+.metric-value{font-size:24px;font-weight:600;font-family:'DM Mono',monospace;}
+.metric-value.green{color:var(--teal);}
+.metric-value.red{color:var(--red);}
+.metric-value.amber{color:var(--amber);}
+.form-grid{display:grid;gap:12px;margin-bottom:12px;}
+.form-grid.g2{grid-template-columns:1fr 1fr;}
+.form-grid.g3{grid-template-columns:1fr 1fr 1fr;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);}
+.field input,.field select{padding:9px 12px;border:1px solid var(--border-strong);border-radius:var(--rs);font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;}
+.field input:focus,.field select:focus{border-color:var(--teal-m);background:#fff;}
+.calc-box{background:var(--bg);border-radius:var(--rs);padding:1rem;margin:1rem 0;border:1px solid var(--border);}
+.calc-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:10px;}
+.calc-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--text2);}
+.calc-row.total{font-weight:600;color:var(--text);border-top:1px solid var(--border);margin-top:8px;padding-top:10px;font-size:15px;}
+.btn-primary{background:var(--teal-m);color:#fff;border:none;padding:10px 22px;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s;}
+.btn-primary:hover{opacity:.87;}
+.btn-secondary{background:none;border:1px solid var(--border-strong);padding:9px 18px;border-radius:var(--rs);font-size:13px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.btn-secondary:hover{background:var(--bg);color:var(--text);}
+.btn-sm{padding:5px 12px;font-size:12px;}
+.btn-danger{background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;padding:4px 8px;border-radius:var(--rs);font-family:'DM Sans',sans-serif;}
+.btn-danger:hover{background:var(--red-l);}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--bg);}
+tfoot td{background:var(--bg);font-weight:600;}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.b-teal{background:var(--teal-l);color:var(--teal);}
+.b-blue{background:var(--blue-l);color:var(--blue);}
+.b-coral{background:var(--coral-l);color:var(--coral);}
+.b-amber{background:var(--amber-l);color:var(--amber);}
+.b-purple{background:var(--purple-l);color:var(--purple);}
+.b-dark{background:#0a1628;color:#4dd9a8;}
+.b-gray{background:#f1efe8;color:#444441;}
+.b-green{background:var(--teal-l);color:var(--teal);}
+.b-yellow{background:var(--amber-l);color:var(--amber);}
+.channel-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
+.ch-card{background:var(--bg);border-radius:var(--rs);padding:1rem;border:1px solid var(--border);}
+.ch-name{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:6px;}
+.ch-val{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;}
+.ch-count{font-size:11px;color:var(--text3);margin-top:3px;}
+.mfilters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;}
+.mbtn{padding:5px 13px;border:1px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;background:none;color:var(--text2);font-family:'DM Sans',sans-serif;transition:all .15s;}
+.mbtn.active{background:var(--teal-m);color:#fff;border-color:var(--teal-m);}
+.empty{text-align:center;padding:2.5rem;color:var(--text3);font-size:14px;}
+.mono{font-family:'DM Mono',monospace;}
+.pos{color:var(--teal);font-weight:600;font-family:'DM Mono',monospace;}
+.neg{color:var(--red);font-weight:600;font-family:'DM Mono',monospace;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--teal);color:#fff;padding:12px 20px;border-radius:var(--r);font-size:13px;font-weight:500;z-index:9999;display:none;}
+.view{display:none;}
+.view.active{display:block;}
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px;}
+.sec-title{font-size:18px;font-weight:600;}
+.sel{padding:7px 12px;border:1px solid var(--border-strong);border-radius:var(--rs);background:var(--surface);color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;}
+.modal-bg{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;}
+.modal-box{background:var(--surface);border-radius:var(--r);padding:1.5rem;width:100%;max-width:380px;margin:1rem;}
+@media(max-width:700px){.metrics{grid-template-columns:1fr 1fr;}.form-grid.g3{grid-template-columns:1fr 1fr;}.channel-grid{grid-template-columns:1fr 1fr;}.main{padding:1rem;}}
+</style>
+</head>
+<body>
+
+<div id="login-screen" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#0a1628;z-index:500;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:2.5rem;width:100%;max-width:360px;text-align:center;">
+    <div style="font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--text2);text-transform:uppercase;margin-bottom:6px;">Miami Wow Tours</div>
+    <div style="font-size:22px;font-weight:600;margin-bottom:8px;">Manager Portal</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1.5rem;">Enter your password to continue</div>
+    <input type="password" id="pw-input" placeholder="password" style="width:100%;padding:12px 14px;border:1px solid var(--border-strong);border-radius:var(--rs);font-size:15px;text-align:center;outline:none;margin-bottom:12px;background:var(--bg);" onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()" style="width:100%;padding:12px;background:var(--teal-m);color:#fff;border:none;border-radius:var(--rs);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">Sign in</button>
+    <div id="pw-error" style="color:var(--red);font-size:13px;margin-top:10px;display:none;">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="topbar-brand">Miami <span>Wow</span> Tours</div>
+  <div class="topbar-year">2026</div>
+  <button onclick="logout()">Sign out</button>
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn active" onclick="showView('dashboard')">Dashboard</button>
+  <button class="nav-btn" onclick="showView('log')">Log a tour</button>
+  <button class="nav-btn" onclick="showView('tours')">Tour history</button>
+  <button class="nav-btn" onclick="showView('guides')">Guides</button>
+  <button class="nav-btn" onclick="showView('payreport')">Pay report</button>
+  <button class="nav-btn" onclick="showView('payments')">Payments</button>
+  <button class="nav-btn" onclick="showView('expenses')">Expenses</button>
+  <button class="nav-btn" onclick="showView('reconcile')">Bank reconciliation</button>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:8px 0;">
+    <button class="btn-secondary btn-sm" onclick="exportBackup()" style="font-size:11px;padding:5px 10px;">Export backup</button>
+    <label class="btn-secondary btn-sm" style="font-size:11px;padding:5px 10px;cursor:pointer;margin:0;">Import backup<input type="file" id="import-file" accept=".json" style="display:none;" onchange="importBackup(event)"></label>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<div id="view-dashboard" class="view active">
+  <div class="sec-header">
+    <div class="sec-title">Overview</div>
+    <select class="sel" id="dash-month" onchange="renderDashboard()">
+      <option value="all">All of 2026</option>
+      <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+      <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+      <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+      <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+    </select>
+  </div>
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Tours run</div><div class="metric-value" id="d-tours">0</div></div>
+    <div class="metric"><div class="metric-label">Total guests</div><div class="metric-value" id="d-guests">0</div></div>
+    <div class="metric"><div class="metric-label">Gross revenue</div><div class="metric-value" id="d-gross">$0</div></div>
+    <div class="metric"><div class="metric-label">Net profit</div><div class="metric-value green" id="d-profit">$0</div></div>
+  </div>
+  <div class="metrics" style="margin-top:-4px;">
+    <div class="metric"><div class="metric-label">Total received</div><div class="metric-value green" id="d-received">$0</div></div>
+    <div class="metric"><div class="metric-label">Outstanding</div><div class="metric-value amber" id="d-outstanding">$0</div></div>
+    <div class="metric"><div class="metric-label">Tours unpaid</div><div class="metric-value amber" id="d-unpaid">0</div></div>
+    <div class="metric"><div class="metric-label">Vendor payments</div><div class="metric-value" id="d-venpay">0</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Revenue by channel (net of commission)</div>
+    <div class="channel-grid" id="channel-grid"></div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:1.25rem 1.25rem .75rem;border-bottom:1px solid var(--border);font-size:14px;font-weight:600;">Recent tours</div>
+    <div class="table-wrap" id="recent-table"></div>
+  </div>
+</div>
+
+<!-- LOG TOUR -->
+<div id="view-log" class="view">
+  <div class="sec-title" style="margin-bottom:1rem;">Log a new tour</div>
+  <div class="card">
+    <div class="form-grid g2">
+      <div class="field"><label>Tour</label>
+        <select id="f-product" onchange="calcTour()">
+          <option value="Miami Wow Tour">Miami Wow Tour</option>
+          <option value="Little Havana After Dark">Little Havana After Dark</option>
+        </select>
+      </div>
+      <div class="field"><label>Date</label><input type="date" id="f-date"></div>
+    </div>
+    <div class="form-grid g2">
+      <div class="field"><label>Tour type</label>
+        <select id="f-type" onchange="calcTour()">
+          <option value="regular">Regular tour</option>
+          <option value="private">Private tour ($500 flat)</option>
+        </select>
+      </div>
+      <div class="field"><label>Guide</label>
+        <select id="f-guide" onchange="calcTour()">
+          <option value="Noel">Noel</option><option value="Hugo">Hugo</option><option value="Lanny">Lanny</option>
+          <option value="Yari">Yari</option><option value="Raul">Raul</option><option value="Joanna">Joanna</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid g3">
+      <div class="field"><label id="f-adults-label">Adults ($62)</label><input type="number" id="f-adults" min="0" value="0" oninput="calcTour()"></div>
+      <div class="field"><label id="f-children-label">Children 7-12 ($47)</label><input type="number" id="f-children" min="0" value="0" oninput="calcTour()"></div>
+      <div class="field"><label>Under 7 (free)</label><input type="number" id="f-infants" min="0" value="0" oninput="calcTour()"></div>
+    </div>
+    <div class="form-grid g2">
+      <div class="field"><label>Booking channel</label>
+        <select id="f-channel" onchange="calcTour()">
+          <option value="Fareharbor">Fareharbor (2.9%)</option>
+          <option value="TripAdvisor">TripAdvisor (32%)</option>
+          <option value="Airbnb">Airbnb (20%)</option>
+          <option value="GYG">GetYourGuide (25%)</option>
+          <option value="Civitatis">Civitatis (25%)</option>
+        </select>
+      </div>
+      <div class="field"><label>Other expenses ($)</label><input type="number" id="f-expenses" min="0" value="0" oninput="calcTour()" placeholder="0"></div>
+    </div>
+    <div class="field" style="margin-bottom:12px;"><label>Notes (optional)</label><input type="text" id="f-notes" placeholder="e.g. great group..."></div>
+    <div class="calc-box">
+      <div class="calc-label">Breakdown</div>
+      <div class="calc-row"><span>Gross revenue</span><span class="mono" id="c-gross">$0.00</span></div>
+      <div class="calc-row"><span>Channel commission</span><span class="mono" style="color:var(--red);" id="c-comm">-$0.00</span></div>
+      <div class="calc-row" id="c-fhproc-row"><span>FH bank fee (2% — all channels)</span><span class="mono" style="color:var(--red);" id="c-fhproc">-$0.00</span></div>
+      <div class="calc-row" id="c-fhflat-row"><span>FH flat fee</span><span class="mono" style="color:var(--red);">-$0.30</span></div>
+      <div class="calc-row"><span>Guide pay</span><span class="mono" style="color:var(--red);" id="c-guide">-$0.00</span></div>
+      <div class="calc-row" id="c-drinks-row"><span>Soft drinks ($1/guest)</span><span class="mono" style="color:var(--amber);" id="c-drinks">-$0.00</span></div>
+      <div class="calc-row"><span>Other expenses</span><span class="mono" style="color:var(--red);" id="c-exp">$0.00</span></div>
+      <div class="calc-row total"><span>Net profit</span><span class="mono" id="c-profit">$0.00</span></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="btn-primary" onclick="logTour()">Save tour</button>
+      <button class="btn-secondary" onclick="clearForm()">Clear</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOUR HISTORY -->
+<div id="view-tours" class="view">
+  <div class="sec-header">
+    <div class="sec-title">Tour history</div>
+    <button class="btn-secondary btn-sm" onclick="exportCSV()">Export CSV</button>
+  </div>
+  <div class="mfilters" id="month-filters"></div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div class="table-wrap" id="tours-table"></div>
+  </div>
+</div>
+
+<!-- GUIDES -->
+<div id="view-guides" class="view">
+  <div class="sec-title" style="margin-bottom:1rem;">Guide performance 2026</div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div class="table-wrap" id="guides-table"></div>
+  </div>
+  <div class="card" style="margin-top:1rem;">
+    <div class="card-title">Pay rate reference</div>
+    <table>
+      <thead><tr><th>Guide</th><th>Under 4 guests</th><th>4+ guests</th><th>Private</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:600;">Noel</td><td>$75</td><td>$100</td><td>$80</td></tr>
+        <tr><td style="font-weight:600;">Hugo</td><td>$60</td><td>$75</td><td>$80</td></tr>
+        <tr><td style="font-weight:600;">Lanny</td><td>$60</td><td>$75</td><td>$80</td></tr>
+        <tr><td style="font-weight:600;">Yari</td><td>$60</td><td>$75</td><td>$80</td></tr>
+        <tr><td style="font-weight:600;">Raul</td><td>$60</td><td>$75</td><td>$80</td></tr>
+        <tr><td style="font-weight:600;">Joanna</td><td>$60</td><td>$75</td><td>$80</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PAY REPORT -->
+<div id="view-payreport" class="view">
+  <div class="sec-header">
+    <div class="sec-title">Guide pay report</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <select class="sel" id="pr-month" onchange="renderPayReport()">
+        <option value="all">All of 2026</option>
+        <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+        <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+        <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+        <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+      </select>
+      <select class="sel" id="pr-guide" onchange="renderPayReport()">
+        <option value="all">All guides</option>
+        <option value="Noel">Noel</option><option value="Hugo">Hugo</option><option value="Lanny">Lanny</option>
+        <option value="Yari">Yari</option><option value="Raul">Raul</option><option value="Joanna">Joanna</option>
+      </select>
+      <button class="btn-secondary btn-sm" onclick="exportPayCSV()">Export CSV</button>
+    </div>
+  </div>
+  <div id="pr-summary" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:1.25rem;"></div>
+  <div id="pr-content"></div>
+</div>
+
+<!-- PAYMENTS -->
+<div id="view-payments" class="view">
+  <div class="sec-header">
+    <div class="sec-title">Payment tracker</div>
+    <select class="sel" id="pay-mf" onchange="renderPayments()">
+      <option value="all">All months</option>
+      <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+      <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+      <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+      <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+    </select>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+    <div class="card" style="margin-bottom:0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <div class="card-title" style="margin-bottom:0;">Tour payments</div>
+        <div id="tour-pay-summary" style="font-size:12px;color:var(--text2);"></div>
+      </div>
+      <div class="table-wrap" id="tour-pay-table"></div>
+    </div>
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-title">Log a vendor payment</div>
+      <div class="form-grid g2" style="margin-bottom:12px;">
+        <div class="field"><label>Vendor</label>
+          <select id="vp-channel">
+            <option value="Fareharbor">Fareharbor</option><option value="TripAdvisor">TripAdvisor</option>
+            <option value="Airbnb">Airbnb</option><option value="GYG">GetYourGuide</option>
+            <option value="Civitatis">Civitatis</option>
+          </select>
+        </div>
+        <div class="field"><label>Payment date</label><input type="date" id="vp-date"></div>
+      </div>
+      <div class="form-grid g2" style="margin-bottom:12px;">
+        <div class="field"><label>Amount received ($)</label><input type="number" id="vp-amount" min="0" step="0.01" placeholder="0.00"></div>
+        <div class="field"><label>Notes (optional)</label><input type="text" id="vp-notes" placeholder="e.g. covers Jan 1-15"></div>
+      </div>
+      <button class="btn-primary" onclick="logVendorPayment()">Save payment</button>
+      <div style="margin-top:1.25rem;border-top:1px solid var(--border);padding-top:1rem;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Vendor payment history</div>
+        <div class="table-wrap" id="vendor-pay-table"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPENSES -->
+<div id="view-expenses" class="view">
+  <div class="sec-header">
+    <div class="sec-title">Expense ledger 2026</div>
+    <div style="display:flex;gap:8px;">
+      <select class="sel" id="exp-mf" onchange="renderExpenses()">
+        <option value="all">All months</option>
+        <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+        <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+        <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+        <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+      </select>
+      <button class="btn-secondary btn-sm" onclick="exportExpCSV()">Export CSV</button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:320px 1fr;gap:1rem;align-items:start;">
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-title">Add an expense</div>
+      <div class="field" style="margin-bottom:12px;"><label>Date</label><input type="date" id="exp-date"></div>
+      <div class="field" style="margin-bottom:12px;"><label>Amount ($)</label><input type="number" id="exp-amount" min="0" step="0.01" placeholder="0.00"></div>
+      <div class="field" style="margin-bottom:12px;"><label>Description</label><input type="text" id="exp-desc" placeholder="e.g. Insurance, Hugo salary Jan..."></div>
+      <div class="field" style="margin-bottom:16px;"><label>Paid by</label>
+        <select id="exp-paidby">
+          <option value="Bank transfer">Bank transfer</option><option value="Zelle">Zelle</option>
+          <option value="Credit card">Credit card</option><option value="Cash">Cash</option>
+          <option value="Check">Check</option><option value="Other">Other</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="addExpense()" style="width:100%;">Add expense</button>
+    </div>
+    <div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:1rem;">
+        <div class="metric"><div class="metric-label">Year total</div><div class="metric-value red" id="exp-total">$0</div></div>
+        <div class="metric"><div class="metric-label">Period total</div><div class="metric-value" id="exp-period">$0</div></div>
+        <div class="metric"><div class="metric-label">Entries</div><div class="metric-value" id="exp-count">0</div></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="table-wrap" id="expenses-table"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BANK RECONCILIATION -->
+<div id="view-reconcile" class="view">
+  <div class="sec-header">
+    <div class="sec-title">Bank reconciliation</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <select class="sel" id="rec-month" onchange="renderReconcile()">
+        <option value="all">All of 2026</option>
+        <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+        <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+        <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+        <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+      </select>
+      <button class="btn-secondary btn-sm" onclick="exportReconcileCSV()">Export CSV</button>
+    </div>
+  </div>
+  <div id="rec-summary-cards" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1.25rem;"></div>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:1rem;">
+    <div style="padding:1rem 1.25rem .75rem;border-bottom:1px solid var(--border);font-size:14px;font-weight:600;">Summary by vendor</div>
+    <div class="table-wrap" id="rec-vendor-summary"></div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:1rem 1.25rem .75rem;border-bottom:1px solid var(--border);font-size:14px;font-weight:600;">Deposit detail — chronological</div>
+    <div class="table-wrap" id="rec-detail"></div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<!-- Edit tour modal -->
+<div id="edit-modal-bg" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:300;overflow-y:auto;">
+  <div style="background:var(--surface);border-radius:var(--r);padding:1.5rem;width:90%;max-width:480px;margin:2rem auto;">
+    <div style="font-size:17px;font-weight:600;margin-bottom:1.25rem;color:var(--text);">Edit tour</div>
+    <div class="field" style="margin-bottom:12px;"><label>Tour product</label>
+      <select id="em-product" onchange="previewEdit()">
+        <option value="Miami Wow Tour">Miami Wow Tour</option>
+        <option value="Little Havana After Dark">Little Havana After Dark</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field"><label>Date</label><input type="date" id="em-date"></div>
+      <div class="field"><label>Tour type</label>
+        <select id="em-type" onchange="previewEdit()">
+          <option value="regular">Regular tour</option>
+          <option value="private">Private tour ($500)</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field"><label>Guide</label>
+        <select id="em-guide" onchange="previewEdit()">
+          <option value="Noel">Noel</option><option value="Hugo">Hugo</option><option value="Lanny">Lanny</option>
+          <option value="Yari">Yari</option><option value="Raul">Raul</option><option value="Joanna">Joanna</option>
+        </select>
+      </div>
+      <div class="field"><label>Booking channel</label>
+        <select id="em-channel" onchange="previewEdit()">
+          <option value="Fareharbor">Fareharbor (2.9%)</option>
+          <option value="TripAdvisor">TripAdvisor (32%)</option>
+          <option value="Airbnb">Airbnb (20%)</option>
+          <option value="GYG">GetYourGuide (25%)</option>
+          <option value="Civitatis">Civitatis (25%)</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field"><label id="em-adults-label">Adults ($62)</label><input type="number" id="em-adults" min="0" oninput="previewEdit()"></div>
+      <div class="field"><label id="em-children-label">Children ($47)</label><input type="number" id="em-children" min="0" oninput="previewEdit()"></div>
+      <div class="field"><label>Under 7 (free)</label><input type="number" id="em-infants" min="0" oninput="previewEdit()"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field"><label>Other expenses ($)</label><input type="number" id="em-expenses" min="0" value="0" oninput="previewEdit()" placeholder="0.00" step="0.01"></div>
+      <div class="field"><label>Notes</label><input type="text" id="em-notes" placeholder="optional"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field">
+        <label>Guide pay override ($)</label>
+        <input type="number" id="em-guidepay" min="0" value="" oninput="previewEdit()" placeholder="Auto — leave blank" step="0.01">
+      </div>
+      <div style="display:flex;align-items:flex-end;padding-bottom:2px;">
+        <div style="font-size:12px;color:var(--text3);line-height:1.4;">Auto-calc: based on guest count &amp; guide rates. Enter a value here to override it.</div>
+      </div>
+    </div>
+    <div class="calc-box" style="margin-bottom:1rem;">
+      <div class="calc-label">Recalculated breakdown</div>
+      <div class="calc-row"><span>Gross revenue</span><span class="mono" id="em-gross">$0.00</span></div>
+      <div class="calc-row"><span>Channel commission</span><span class="mono" style="color:var(--red);" id="em-comm">-$0.00</span></div>
+      <div class="calc-row" id="em-fhflat-row"><span>FH flat fee ($0.30)</span><span class="mono" style="color:var(--red);">-$0.30</span></div>
+      <div class="calc-row" id="em-fhproc-row"><span>FH bank fee (2%)</span><span class="mono" style="color:var(--red);" id="em-fhproc">-$0.00</span></div>
+      <div class="calc-row"><span>Guide pay</span><span class="mono" style="color:var(--red);" id="em-guide-pay">-$0.00</span></div>
+      <div class="calc-row" id="em-drinks-row"><span>Soft drinks ($1/guest)</span><span class="mono" style="color:var(--amber);" id="em-drinks">-$0.00</span></div>
+      <div class="calc-row"><span>Other expenses</span><span class="mono" style="color:var(--red);" id="em-exp">$0.00</span></div>
+      <div class="calc-row total"><span>Net profit</span><span class="mono" id="em-profit">$0.00</span></div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-primary" onclick="saveEdit()">Save changes</button>
+      <button class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mark-paid modal -->
+<div class="modal-bg" id="pay-modal-bg" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal-box">
+    <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Mark tour as paid</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;" id="modal-label"></div>
+    <div class="form-grid g2">
+      <div class="field"><label>Payment date</label><input type="date" id="modal-date"></div>
+      <div class="field"><label>Amount received ($)</label><input type="number" id="modal-amount" min="0" step="0.01"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:1rem;">
+      <button class="btn-primary" onclick="savePayment()">Save</button>
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div id="loading-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,22,40,0.85);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+  <div style="color:#fff;font-size:16px;font-weight:500;font-family:'DM Sans',sans-serif;" id="loading-msg">Loading...</div>
+  <div style="width:40px;height:40px;border:3px solid rgba(255,255,255,0.2);border-top-color:#4dd9a8;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+
+<script>
+//<![CDATA[
+var SB_URL = 'https://djvzoqpgvxcezsxqlvuf.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqdnpvcXBndnhjZXpzeHFsdnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3Nzk3MjYsImV4cCI6MjA5MTM1NTcyNn0._54P3DYTinP4t5yKjUX3tkGsVKEJLjA4APggq_F8VF4';
+var PASSWORD = 'palante2022';
+
+async function sbFetch(method, table, body, query) {
+  var url = SB_URL + '/rest/v1/' + table + (query || '');
+  var headers = {
+    'apikey': SB_KEY,
+    'Authorization': 'Bearer ' + SB_KEY,
+    'Content-Type': 'application/json'
+  };
+  if (method === 'POST') headers['Prefer'] = 'resolution=merge-duplicates';
+  if (method === 'GET') headers['Accept'] = 'application/json';
+  var opts = { method: method, headers: headers };
+  if (body) opts.body = JSON.stringify(body);
+  var res = await fetch(url, opts);
+  if (!res.ok) { console.error('Supabase error:', res.status, await res.text()); return method === 'GET' ? [] : false; }
+  if (method === 'GET') return await res.json();
+  return true;
+}
+
+function tourToRow(t) {
+  var vnet = (t.vendorNet && t.vendorNet > 0) ? t.vendorNet : Math.round(((t.gross||0) - (t.comm||0) - (t.fhFlat||0)) * 100) / 100;
+  return {
+    id: t.id, date: t.date, product: t.product || 'Miami Wow Tour',
+    type: t.type, guide: t.guide, channel: t.channel,
+    adults: t.adults || 0, children: t.children || 0, infants: t.infants || 0,
+    pax: t.pax || t.totalPax || 0,
+    gross: t.gross || 0, comm: t.comm || 0,
+    fh_flat: t.fhFlat || 0, fh_proc: t.fhProc || 0,
+    vendor_net: vnet, guide_pay: t.guidePay || 0,
+    drinks: t.drinks || 0, other_exp: t.otherExp || 0,
+    profit: t.profit || 0, notes: t.notes || '',
+    paid_date: t.paidDate || null, paid_amount: t.paidAmount || null
+  };
+}
+
+function rowToTour(r) {
+  return {
+    id: r.id, date: r.date, product: r.product || 'Miami Wow Tour',
+    type: r.type, guide: r.guide, channel: r.channel,
+    adults: r.adults, children: r.children, infants: r.infants,
+    pax: r.pax, gross: parseFloat(r.gross), comm: parseFloat(r.comm),
+    fhFlat: parseFloat(r.fh_flat), fhProc: parseFloat(r.fh_proc),
+    vendorNet: (parseFloat(r.vendor_net) > 0) ? parseFloat(r.vendor_net) : Math.round((parseFloat(r.gross||0) - parseFloat(r.comm||0) - parseFloat(r.fh_flat||0)) * 100) / 100,
+    guidePay: parseFloat(r.guide_pay),
+    drinks: parseFloat(r.drinks), otherExp: parseFloat(r.other_exp),
+    profit: parseFloat(r.profit), notes: r.notes,
+    paidDate: r.paid_date, paidAmount: r.paid_amount ? parseFloat(r.paid_amount) : null
+  };
+}
+
+function vpToRow(p) { return { id: p.id, channel: p.channel, date: p.date, amount: p.amount, notes: p.notes || '' }; }
+function rowToVP(r) { return { id: r.id, channel: r.channel, date: r.date, amount: parseFloat(r.amount), notes: r.notes }; }
+function expToRow(e) { return { id: e.id, date: e.date, amount: e.amount, description: e.desc, paid_by: e.paidby }; }
+function rowToExp(r) { return { id: r.id, date: r.date, amount: parseFloat(r.amount), desc: r.description, paidby: r.paid_by }; }
+
+var TOURS = {
+  'Miami Wow Tour': {adultPrice: 62, childPrice: 47, hasPrivate: true, privatePrice: 500, startTime: '11:00AM'},
+  'Little Havana After Dark': {adultPrice: 72, childPrice: 72, hasPrivate: false, privatePrice: 0, startTime: '6:30PM'}
+};
+var CHANNELS = {
+  Fareharbor: {rate:0.029, label:'Fareharbor', badge:'b-teal'},
+  TripAdvisor: {rate:0.32,  label:'TripAdvisor', badge:'b-blue'},
+  Airbnb:      {rate:0.20,  label:'Airbnb',      badge:'b-coral'},
+  GYG:         {rate:0.25,  label:'GetYourGuide', badge:'b-amber'},
+  Civitatis:   {rate:0.25,  label:'Civitatis',   badge:'b-purple'}
+};
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var FULLMONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+var DRINK = 1.00, FH_PROC = 0.02, FH_FLAT = 0.30;
+var tours = [], vendorPayments = [], expenses = [], filterMonth = 'all', modalTourId = null;
+
+function doLogin() {
+  var val = document.getElementById('pw-input').value;
+  if (val === PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    localStorage.setItem('mwt-auth', '1');
+    loadAll();
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('mwt-auth');
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-error').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+function calcTourData(adults, children, infants, guide, channel, type, otherExp, product) {
+  var tour = TOURS[product] || TOURS['Miami Wow Tour'];
+  var gross = type === 'private' ? tour.privatePrice : (adults * tour.adultPrice + children * tour.childPrice);
+  var pax = adults + children + infants;
+  var comm = Math.round(gross * CHANNELS[channel].rate * 100) / 100;
+  var fhFlat = channel === 'Fareharbor' ? FH_FLAT : 0;
+  var vendorNet = Math.round((gross - comm - fhFlat) * 100) / 100;
+  var fhProc = Math.round(gross * FH_PROC * 100) / 100;
+  var guidePay;
+  if (type === 'private') { guidePay = 80; }
+  else if (guide === 'Noel') { guidePay = pax < 4 ? 75 : 100; }
+  else { guidePay = pax < 4 ? 60 : 75; }
+  var drinks = product === 'Miami Wow Tour' ? Math.round(pax * DRINK * 100) / 100 : 0;
+  var exp = parseFloat(otherExp) || 0;
+  var profit = Math.round((gross - comm - fhFlat - fhProc - guidePay - drinks - exp) * 100) / 100;
+  return {gross:gross, comm:comm, fhFlat:fhFlat, fhProc:fhProc, vendorNet:vendorNet, guidePay:guidePay, drinks:drinks, otherExp:exp, profit:profit, pax:pax};
+}
+
+function calcTour() {
+  var adults = parseInt(document.getElementById('f-adults').value) || 0;
+  var children = parseInt(document.getElementById('f-children').value) || 0;
+  var infants = parseInt(document.getElementById('f-infants').value) || 0;
+  var guide = document.getElementById('f-guide').value;
+  var channel = document.getElementById('f-channel').value;
+  var type = document.getElementById('f-type').value;
+  var exp = parseFloat(document.getElementById('f-expenses').value) || 0;
+  var product = document.getElementById('f-product').value;
+  var tour = TOURS[product] || TOURS['Miami Wow Tour'];
+  var typeEl = document.getElementById('f-type');
+  var privateOpt = typeEl ? typeEl.querySelector('option[value="private"]') : null;
+  if (privateOpt) privateOpt.disabled = !tour.hasPrivate;
+  if (!tour.hasPrivate && type === 'private') { if(typeEl) typeEl.value = 'regular'; type = 'regular'; }
+  document.getElementById('f-adults-label').textContent = 'Adults ($' + tour.adultPrice + ')';
+  document.getElementById('f-children-label').textContent = 'Children 7-12 ($' + tour.childPrice + ')';
+  var d = calcTourData(adults, children, infants, guide, channel, type, exp, product);
+  document.getElementById('c-gross').textContent = '$' + d.gross.toFixed(2);
+  document.getElementById('c-comm').textContent = '-$' + d.comm.toFixed(2) + ' (' + Math.round(CHANNELS[channel].rate * 100) + '%)';
+  document.getElementById('c-fhproc').textContent = '-$' + d.fhProc.toFixed(2);
+  document.getElementById('c-fhflat-row').style.display = channel === 'Fareharbor' ? 'flex' : 'none';
+  document.getElementById('c-fhproc-row').style.display = channel === 'Fareharbor' ? 'none' : 'flex';
+  document.getElementById('c-guide').textContent = '-$' + d.guidePay.toFixed(2);
+  document.getElementById('c-drinks-row').style.display = product === 'Miami Wow Tour' ? 'flex' : 'none';
+  document.getElementById('c-drinks').textContent = '-$' + d.drinks.toFixed(2) + ' (' + d.pax + ' x $1)';
+  document.getElementById('c-exp').textContent = exp > 0 ? '-$' + exp.toFixed(2) : '$0.00';
+  var pel = document.getElementById('c-profit');
+  pel.textContent = (d.profit < 0 ? '-$' + Math.abs(d.profit).toFixed(2) : '$' + d.profit.toFixed(2));
+  pel.style.color = d.profit < 0 ? 'var(--red)' : 'var(--teal)';
+}
+
+function logTour() {
+  var date = document.getElementById('f-date').value;
+  if (!date) { toast('Please select a date.', true); return; }
+  var adults = parseInt(document.getElementById('f-adults').value) || 0;
+  var children = parseInt(document.getElementById('f-children').value) || 0;
+  var infants = parseInt(document.getElementById('f-infants').value) || 0;
+  var guide = document.getElementById('f-guide').value;
+  var channel = document.getElementById('f-channel').value;
+  var type = document.getElementById('f-type').value;
+  var exp = parseFloat(document.getElementById('f-expenses').value) || 0;
+  var notes = document.getElementById('f-notes').value;
+  var product = document.getElementById('f-product').value;
+  if (adults + children + infants === 0) { toast('Please enter at least 1 guest.', true); return; }
+  var d = calcTourData(adults, children, infants, guide, channel, type, exp, product);
+  var t = { id: Date.now(), date: date, adults: adults, children: children, infants: infants,
+    guide: guide, channel: channel, type: type, otherExp: exp, notes: notes, product: product,
+    gross: d.gross, comm: d.comm, fhProc: d.fhProc, fhFlat: d.fhFlat,
+    vendorNet: d.vendorNet, guidePay: d.guidePay, drinks: d.drinks, profit: d.profit, pax: d.pax };
+  tours.push(t); saveTours(); saveTour(t);
+  toast('Tour saved!'); clearForm(); showView('dashboard');
+}
+
+function clearForm() {
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('f-date').value = today;
+  document.getElementById('f-product').value = 'Miami Wow Tour';
+  document.getElementById('f-adults').value = 0;
+  document.getElementById('f-children').value = 0;
+  document.getElementById('f-infants').value = 0;
+  document.getElementById('f-expenses').value = 0;
+  document.getElementById('f-notes').value = '';
+  document.getElementById('f-type').value = 'regular';
+  calcTour();
+}
+
+function deleteTour(id) {
+  if (!confirm('Delete this tour? This cannot be undone.')) return;
+  tours = tours.filter(function(t) { return t.id !== id; });
+  saveTours(); deleteTourDB(id);
+  renderTours(); renderDashboard(); renderGuides();
+  toast('Tour deleted.');
+}
+
+async function saveTour(t) { await sbFetch('POST', 'tours', tourToRow(t), '?on_conflict=id'); }
+async function deleteTourDB(id) { await sbFetch('DELETE', 'tours', null, '?id=eq.' + id); }
+async function saveVPRecord(p) { await sbFetch('POST', 'vendor_payments', vpToRow(p), '?on_conflict=id'); }
+async function deleteVPDB(id) { await sbFetch('DELETE', 'vendor_payments', null, '?id=eq.' + id); }
+async function saveExpRecord(e) { await sbFetch('POST', 'expenses', expToRow(e), '?on_conflict=id'); }
+async function deleteExpDB(id) { await sbFetch('DELETE', 'expenses', null, '?id=eq.' + id); }
+function saveTours() { try { localStorage.setItem('mwt-tours-2026', JSON.stringify(tours)); } catch(e){} }
+function saveVP() { try { localStorage.setItem('mwt-vp-2026', JSON.stringify(vendorPayments)); } catch(e){} }
+function saveExp() { try { localStorage.setItem('mwt-exp-2026', JSON.stringify(expenses)); } catch(e){} }
+
+function showLoading(msg) { var el=document.getElementById('loading-overlay'); var ml=document.getElementById('loading-msg'); if(el) el.style.display='flex'; if(ml) ml.textContent=msg||'Loading...'; }
+function hideLoading() { var el=document.getElementById('loading-overlay'); if(el) el.style.display='none'; }
+
+async function loadAll() {
+  showLoading('Loading your data...');
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('f-date').value = today;
+  document.getElementById('vp-date').value = today;
+  document.getElementById('exp-date').value = today;
+  try {
+    var tRows = await sbFetch('GET', 'tours', null, '?order=date.asc&limit=10000');
+    if (Array.isArray(tRows) && tRows.length > 0) { tours = tRows.map(rowToTour); saveTours(); }
+    else { var raw = localStorage.getItem('mwt-tours-2026'); tours = raw ? JSON.parse(raw) : []; }
+  } catch(e) { var raw = localStorage.getItem('mwt-tours-2026'); tours = raw ? JSON.parse(raw) : []; }
+  try {
+    var vpRows = await sbFetch('GET', 'vendor_payments', null, '?order=date.asc&limit=10000');
+    vendorPayments = Array.isArray(vpRows) ? vpRows.map(rowToVP) : []; saveVP();
+  } catch(e) { var vraw = localStorage.getItem('mwt-vp-2026'); vendorPayments = vraw ? JSON.parse(vraw) : []; }
+  try {
+    var eRows = await sbFetch('GET', 'expenses', null, '?order=date.asc&limit=10000');
+    expenses = Array.isArray(eRows) ? eRows.map(rowToExp) : []; saveExp();
+  } catch(e) { var eraw = localStorage.getItem('mwt-exp-2026'); expenses = eraw ? JSON.parse(eraw) : []; }
+  hideLoading(); renderDashboard(); renderTours(); renderGuides();
+}
+
+function getPax(t) { return t.pax || t.totalPax || 0; }
+function fmt(d) { var p=d.split('-'); return MONTHS[parseInt(p[1])-1]+' '+parseInt(p[2])+', '+p[0]; }
+function fmtM(d) { return new Date(d+'T00:00:00').getMonth(); }
+function ch(channel) { return CHANNELS[channel] || {label:channel, badge:'b-gray'}; }
+function badge(channel) { return '<span class="badge '+ch(channel).badge+'">'+ch(channel).label+'</span>'; }
+function typeBadge(type) { return type==='private'?'<span class="badge b-dark">Private</span>':'Regular'; }
+
+function toast(msg, isErr) {
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.style.background=isErr?'var(--red)':'var(--teal)'; t.style.display='block';
+  setTimeout(function(){ t.style.display='none'; }, 3000);
+}
+
+function showView(v) {
+  var views=['dashboard','log','tours','guides','payreport','payments','expenses','reconcile'];
+  for(var i=0;i<views.length;i++){
+    var el=document.getElementById('view-'+views[i]); if(el) el.classList.remove('active');
+    var btn=document.querySelectorAll('.nav-btn')[i]; if(btn) btn.classList.remove('active');
+  }
+  var active=document.getElementById('view-'+v); if(active) active.classList.add('active');
+  var idx=views.indexOf(v); if(idx>=0){var ab=document.querySelectorAll('.nav-btn')[idx]; if(ab) ab.classList.add('active');}
+  if(v==='dashboard') renderDashboard();
+  if(v==='log') calcTour();
+  if(v==='tours') renderTours();
+  if(v==='guides') renderGuides();
+  if(v==='payreport') renderPayReport();
+  if(v==='payments') renderPayments();
+  if(v==='expenses') renderExpenses();
+  if(v==='reconcile') renderReconcile();
+}
+
+function filteredTours() {
+  if(filterMonth==='all') return tours;
+  return tours.filter(function(t){ return fmtM(t.date)===parseInt(filterMonth); });
+}
+
+function renderDashboard() {
+  var m=document.getElementById('dash-month').value;
+  var data=m==='all'?tours:tours.filter(function(t){ return fmtM(t.date)===parseInt(m); });
+  var gross=0,profit=0,guests=0;
+  data.forEach(function(t){
+    gross+=t.gross;
+    profit+=Math.round((t.gross-t.comm-(t.fhFlat||0)-(t.fhProc||0)-t.guidePay-(t.drinks||0)-(t.otherExp||0))*100)/100;
+    guests+=getPax(t);
+  });
+  var expF=m==='all'?expenses:expenses.filter(function(e){ return fmtM(e.date)===parseInt(m); });
+  profit=Math.round((profit-expF.reduce(function(s,e){ return s+e.amount; },0))*100)/100;
+  document.getElementById('d-tours').textContent=data.length;
+  document.getElementById('d-guests').textContent=guests;
+  document.getElementById('d-gross').textContent='$'+gross.toFixed(2);
+  var pel=document.getElementById('d-profit');
+  pel.textContent=(profit<0?'-$':'$')+Math.abs(profit).toFixed(2);
+  pel.className='metric-value '+(profit<0?'red':'green');
+  var paid=data.filter(function(t){ return t.paidDate; });
+  var unpaid=data.filter(function(t){ return !t.paidDate; });
+  var received=paid.reduce(function(s,t){ return s+(t.paidAmount||0); },0);
+  var outstanding=unpaid.reduce(function(s,t){ var net=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100; return s+net; },0);
+  var vpf=m==='all'?vendorPayments:vendorPayments.filter(function(p){ return fmtM(p.date)===parseInt(m); });
+  document.getElementById('d-received').textContent='$'+received.toFixed(2);
+  document.getElementById('d-outstanding').textContent='$'+outstanding.toFixed(2);
+  document.getElementById('d-unpaid').textContent=unpaid.length;
+  document.getElementById('d-venpay').textContent=vpf.length;
+  var chs={};
+  data.forEach(function(t){ if(!chs[t.channel]) chs[t.channel]={net:0,count:0}; chs[t.channel].net+=t.gross-t.comm; chs[t.channel].count++; });
+  var cgHtml='';
+  Object.keys(CHANNELS).forEach(function(c){
+    var v=chs[c];
+    cgHtml+='<div class="ch-card"><div class="ch-name">'+CHANNELS[c].label+'</div>';
+    cgHtml+='<div class="ch-val">'+(v?'$'+v.net.toFixed(2):'&mdash;')+'</div>';
+    cgHtml+='<div class="ch-count">'+(v?v.count+' tour'+(v.count!==1?'s':''):'No tours')+'</div></div>';
+  });
+  document.getElementById('channel-grid').innerHTML=cgHtml;
+  var last5=data.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); }).slice(0,5);
+  if(last5.length===0){ document.getElementById('recent-table').innerHTML='<div class="empty">No tours yet.</div>'; return; }
+  var rHtml='<table><thead><tr><th>Date</th><th>Guide</th><th>Type</th><th>Guests</th><th>Channel</th><th>Gross</th><th>Profit</th></tr></thead><tbody>';
+  last5.forEach(function(t){
+    var tp=Math.round((t.gross-t.comm-(t.fhFlat||0)-(t.fhProc||0)-t.guidePay-(t.drinks||0)-(t.otherExp||0))*100)/100;
+    rHtml+='<tr><td>'+fmt(t.date)+'</td><td style="font-weight:600;">'+t.guide+'</td><td>'+typeBadge(t.type)+'</td><td>'+getPax(t)+'</td><td>'+badge(t.channel)+'</td>';
+    rHtml+='<td class="mono">$'+t.gross.toFixed(2)+'</td><td class="'+(tp<0?'neg':'pos')+'">$'+tp.toFixed(2)+'</td></tr>';
+  });
+  rHtml+='</tbody></table>';
+  document.getElementById('recent-table').innerHTML=rHtml;
+}
+
+function renderTours() {
+  var usedMonths=[];
+  tours.forEach(function(t){ var m=fmtM(t.date); if(usedMonths.indexOf(m)<0) usedMonths.push(m); });
+  usedMonths.sort(function(a,b){ return a-b; });
+  var mfHtml='<button class="mbtn '+(filterMonth==='all'?'active':'')+'" onclick="setFilter(\'all\')">All</button>';
+  usedMonths.forEach(function(m){ mfHtml+='<button class="mbtn '+(filterMonth==m?'active':'')+'" onclick="setFilter('+m+')">'+FULLMONTHS[m]+'</button>'; });
+  document.getElementById('month-filters').innerHTML=mfHtml;
+  var data=filteredTours().slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+  if(data.length===0){ document.getElementById('tours-table').innerHTML='<div class="empty">No tours found.</div>'; return; }
+  var html='<table><thead><tr><th>Date</th><th>Tour</th><th>Type</th><th>Guide</th><th>Adults</th><th>Kids</th><th>Under 7</th><th>Channel</th><th>Gross</th><th>Comm</th><th>FH proc</th><th>Guide pay</th><th>Drinks</th><th>Other exp</th><th>Profit</th><th>Notes</th><th></th></tr></thead><tbody>';
+  data.forEach(function(t){
+    var product=t.product||'Miami Wow Tour';
+    var pb=product==='Little Havana After Dark'?'<span class="badge b-purple" style="font-size:10px;">LH After Dark</span>':'<span class="badge b-teal" style="font-size:10px;">MWT</span>';
+    var tp=Math.round((t.gross-t.comm-(t.fhFlat||0)-(t.fhProc||0)-t.guidePay-(t.drinks||0)-(t.otherExp||0))*100)/100;
+    html+='<tr><td style="white-space:nowrap;">'+fmt(t.date)+'</td><td>'+pb+'</td><td>'+typeBadge(t.type)+'</td>';
+    html+='<td style="font-weight:600;">'+t.guide+'</td><td>'+t.adults+'</td><td>'+t.children+'</td><td>'+t.infants+'</td>';
+    html+='<td>'+badge(t.channel)+'</td><td class="mono">$'+t.gross.toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--red);">-$'+t.comm.toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--red);">-$'+(t.fhProc||0).toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--red);">-$'+t.guidePay.toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--amber);">'+((t.drinks||0)>0?'-$'+(t.drinks||0).toFixed(2):'&mdash;')+'</td>';
+    html+='<td class="mono" style="color:var(--red);">'+(t.otherExp>0?'-$'+t.otherExp.toFixed(2):'&mdash;')+'</td>';
+    html+='<td class="'+(tp<0?'neg':'pos')+'">$'+tp.toFixed(2)+'</td>';
+    html+='<td style="color:var(--text3);font-size:12px;">'+(t.notes||'&mdash;')+'</td>';
+    html+='<td style="white-space:nowrap;"><button class="btn-secondary btn-sm" onclick="openEditModal('+t.id+')" style="margin-right:4px;">Edit</button><button class="btn-danger" onclick="deleteTour('+t.id+')">Delete</button></td></tr>';
+  });
+  html+='</tbody></table>';
+  document.getElementById('tours-table').innerHTML=html;
+}
+
+function setFilter(m) { filterMonth=m; renderTours(); }
+
+function renderGuides() {
+  var g={};
+  tours.forEach(function(t){
+    if(!g[t.guide]) g[t.guide]={tours:0,guests:0,pay:0,gross:0,net:0,profit:0};
+    g[t.guide].tours++; g[t.guide].guests+=getPax(t); g[t.guide].pay+=t.guidePay;
+    g[t.guide].gross+=t.gross; g[t.guide].net+=(t.gross-t.comm); g[t.guide].profit+=t.profit;
+  });
+  if(Object.keys(g).length===0){ document.getElementById('guides-table').innerHTML='<div class="empty">No tours yet.</div>'; return; }
+  var html='<table><thead><tr><th>Guide</th><th>Tours</th><th>Guests</th><th>Avg pax</th><th>Total pay</th><th>Gross rev</th><th>Net rev</th><th>Profit</th></tr></thead><tbody>';
+  var entries=Object.keys(g).map(function(k){ return [k,g[k]]; });
+  entries.sort(function(a,b){ return b[1].tours-a[1].tours; });
+  entries.forEach(function(e){
+    var name=e[0],v=e[1];
+    html+='<tr><td style="font-weight:600;">'+name+'</td><td>'+v.tours+'</td><td>'+v.guests+'</td>';
+    html+='<td>'+(v.guests/v.tours).toFixed(1)+'</td><td class="mono">$'+v.pay.toFixed(2)+'</td>';
+    html+='<td class="mono">$'+v.gross.toFixed(2)+'</td><td class="mono">$'+v.net.toFixed(2)+'</td>';
+    html+='<td class="'+(v.profit<0?'neg':'pos')+'">$'+v.profit.toFixed(2)+'</td></tr>';
+  });
+  html+='</tbody></table>';
+  document.getElementById('guides-table').innerHTML=html;
+}
+
+function renderPayReport() {
+  var m=document.getElementById('pr-month').value;
+  var sg=document.getElementById('pr-guide').value;
+  var data=tours.filter(function(t){ return (m==='all'||fmtM(t.date)===parseInt(m))&&(sg==='all'||t.guide===sg); }).sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+  var totPay=data.reduce(function(s,t){ return s+t.guidePay; },0);
+  var totDrinks=data.reduce(function(s,t){ return s+(t.drinks||0); },0);
+  var totOther=data.reduce(function(s,t){ return s+(t.otherExp||0); },0);
+  document.getElementById('pr-summary').innerHTML=
+    '<div class="metric"><div class="metric-label">Tours worked</div><div class="metric-value">'+data.length+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Total tour pay</div><div class="metric-value green">$'+totPay.toFixed(2)+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Total reimbursements</div><div class="metric-value amber">$'+(totDrinks+totOther).toFixed(2)+'</div></div>';
+  if(data.length===0){ document.getElementById('pr-content').innerHTML='<div class="card"><div class="empty">No tours found.</div></div>'; return; }
+  var byGuide={};
+  data.forEach(function(t){ if(!byGuide[t.guide]) byGuide[t.guide]=[]; byGuide[t.guide].push(t); });
+  var html='';
+  Object.keys(byGuide).sort().forEach(function(guide){
+    var gt=byGuide[guide];
+    var gPay=gt.reduce(function(s,t){ return s+t.guidePay; },0);
+    var gDrinks=gt.reduce(function(s,t){ return s+(t.drinks||0); },0);
+    var gOther=gt.reduce(function(s,t){ return s+(t.otherExp||0); },0);
+    var gReimb=gDrinks+gOther, gTotal=gPay+gReimb;
+    var period=m==='all'?'Full year 2026':FULLMONTHS[parseInt(m)];
+    html+='<div class="card" style="margin-bottom:1.25rem;">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:12px;">';
+    html+='<div><div style="font-size:18px;font-weight:600;">'+guide+'</div><div style="font-size:12px;color:var(--text3);">'+gt.length+' tour'+(gt.length!==1?'s':'')+' &bull; '+period+'</div></div>';
+    html+='<div style="display:flex;gap:20px;text-align:right;flex-wrap:wrap;">';
+    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Tour pay</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--teal);">$'+gPay.toFixed(2)+'</div></div>';
+    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Drinks reimb.</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--amber);">$'+gDrinks.toFixed(2)+'</div></div>';
+    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Other reimb.</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--amber);">$'+gOther.toFixed(2)+'</div></div>';
+    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Total owed</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;">$'+gTotal.toFixed(2)+'</div></div>';
+    html+='</div></div>';
+    html+='<div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Channel</th><th>Guests</th><th>Tour pay</th><th>Drinks</th><th>Other reimb.</th><th>Total owed</th><th>Notes</th></tr></thead><tbody>';
+    gt.forEach(function(t){
+      var drinks=t.drinks||0,other=t.otherExp||0,total=t.guidePay+drinks+other;
+      html+='<tr><td style="white-space:nowrap;">'+fmt(t.date)+'</td><td>'+typeBadge(t.type)+'</td><td>'+badge(t.channel)+'</td>';
+      html+='<td>'+getPax(t)+' pax</td><td class="mono pos">$'+t.guidePay.toFixed(2)+'</td>';
+      html+='<td class="mono" style="color:var(--amber);">$'+drinks.toFixed(2)+'</td>';
+      html+='<td class="mono" style="color:'+(other>0?'var(--amber)':'var(--text3)')+';">'+(other>0?'$'+other.toFixed(2):'&mdash;')+'</td>';
+      html+='<td class="mono" style="font-weight:600;">$'+total.toFixed(2)+'</td>';
+      html+='<td style="color:var(--text3);font-size:12px;">'+(t.notes||'&mdash;')+'</td></tr>';
+    });
+    html+='</tbody><tfoot><tr><td colspan="4" style="padding:12px;font-weight:600;">Total</td>';
+    html+='<td class="mono pos" style="padding:12px;font-weight:600;">$'+gPay.toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--amber);padding:12px;font-weight:600;">$'+gDrinks.toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--amber);padding:12px;font-weight:600;">$'+gOther.toFixed(2)+'</td>';
+    html+='<td class="mono" style="font-weight:700;padding:12px;font-size:14px;">$'+gTotal.toFixed(2)+'</td><td></td></tr></tfoot></table></div>';
+    html+='<div style="margin-top:1rem;padding:12px 16px;background:var(--bg);border-radius:var(--rs);border:1px solid var(--border);display:flex;gap:24px;flex-wrap:wrap;">';
+    html+='<div style="font-size:12px;color:var(--text2);"><strong>For 1099:</strong> Tour pay = <span class="mono" style="font-weight:600;color:var(--teal);">$'+gPay.toFixed(2)+'</span></div>';
+    html+='<div style="font-size:12px;color:var(--text2);"><strong>Reimbursements</strong> (not taxable) = <span class="mono" style="font-weight:600;color:var(--amber);">$'+gReimb.toFixed(2)+'</span></div>';
+    html+='</div></div>';
+  });
+  document.getElementById('pr-content').innerHTML=html;
+}
+
+function exportPayCSV() {
+  var m=document.getElementById('pr-month').value, sg=document.getElementById('pr-guide').value;
+  var data=tours.filter(function(t){ return (m==='all'||fmtM(t.date)===parseInt(m))&&(sg==='all'||t.guide===sg); }).sort(function(a,b){ return new Date(a.date)-new Date(b.date); });
+  var rows=[['Guide','Date','Type','Channel','Guests','Tour Pay','Drinks Reimb','Other Reimb','Total Reimb','Total Owed','Notes']];
+  data.forEach(function(t){ var dr=t.drinks||0,oe=t.otherExp||0; rows.push([t.guide,t.date,t.type,ch(t.channel).label,getPax(t),t.guidePay.toFixed(2),dr.toFixed(2),oe.toFixed(2),(dr+oe).toFixed(2),(t.guidePay+dr+oe).toFixed(2),t.notes||'']); });
+  downloadCSV(rows,'MWT_PayReport.csv');
+}
+
+function openPayModal(id) {
+  var t=tours.find(function(t){ return t.id===id; });
+  if(!t) return;
+  modalTourId=id;
+  var vendorNet=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100;
+  document.getElementById('modal-label').textContent=fmt(t.date)+' — '+ch(t.channel).label+' — Gross: $'+t.gross.toFixed(2)+' → Vendor deposit: $'+vendorNet.toFixed(2);
+  document.getElementById('modal-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('modal-amount').value=vendorNet.toFixed(2);
+  document.getElementById('pay-modal-bg').style.display='flex';
+}
+
+function closeModal() { document.getElementById('pay-modal-bg').style.display='none'; modalTourId=null; }
+
+function savePayment() {
+  if(!modalTourId) return;
+  var date=document.getElementById('modal-date').value;
+  var amount=parseFloat(document.getElementById('modal-amount').value)||0;
+  if(!date){ toast('Please enter a date.',true); return; }
+  var t=tours.find(function(t){ return t.id===modalTourId; });
+  if(t){ t.paidDate=date; t.paidAmount=amount; }
+  saveTours(); if(t) saveTour(t);
+  closeModal(); renderPayments(); renderDashboard();
+  toast('Payment recorded!');
+}
+
+function unmarkPaid(id) {
+  if(!confirm('Remove payment record?')) return;
+  var t=tours.find(function(t){ return t.id===id; });
+  if(t){ delete t.paidDate; delete t.paidAmount; }
+  saveTours(); if(t) saveTour(t);
+  renderPayments(); renderDashboard();
+  toast('Payment removed.');
+}
+
+function logVendorPayment() {
+  var channel=document.getElementById('vp-channel').value;
+  var date=document.getElementById('vp-date').value;
+  var amount=parseFloat(document.getElementById('vp-amount').value)||0;
+  var notes=document.getElementById('vp-notes').value;
+  if(!date){ toast('Please enter a date.',true); return; }
+  if(amount<=0){ toast('Please enter an amount.',true); return; }
+  var p={id:Date.now(),channel:channel,date:date,amount:amount,notes:notes};
+  vendorPayments.push(p); saveVP(); saveVPRecord(p);
+  document.getElementById('vp-amount').value=''; document.getElementById('vp-notes').value='';
+  renderPayments(); renderDashboard();
+  toast('Vendor payment saved!');
+}
+
+function deleteVP(id) {
+  if(!confirm('Delete this vendor payment?')) return;
+  vendorPayments=vendorPayments.filter(function(p){ return p.id!==id; });
+  saveVP(); deleteVPDB(id); renderPayments(); renderDashboard();
+  toast('Deleted.');
+}
+
+function renderPayments() {
+  var m=document.getElementById('pay-mf').value;
+  var tourData=(m==='all'?tours:tours.filter(function(t){ return fmtM(t.date)===parseInt(m); })).sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+  var paidC=tourData.filter(function(t){ return t.paidDate; }).length;
+  var unpaidC=tourData.filter(function(t){ return !t.paidDate; }).length;
+  document.getElementById('tour-pay-summary').innerHTML='<span style="color:var(--teal);font-weight:600;">'+paidC+' paid</span> &nbsp;&bull;&nbsp; <span style="color:var(--amber);font-weight:600;">'+unpaidC+' pending</span>';
+  var totalGross=tourData.reduce(function(s,t){ return s+t.gross; },0);
+  var totalNet=tourData.reduce(function(s,t){ var net=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100; return s+net; },0);
+  var totalReceived=tourData.filter(function(t){ return t.paidDate; }).reduce(function(s,t){ return s+(t.paidAmount||0); },0);
+  var totalPending=tourData.filter(function(t){ return !t.paidDate; }).reduce(function(s,t){ var net=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100; return s+net; },0);
+  if(tourData.length===0){ document.getElementById('tour-pay-table').innerHTML='<div class="empty">No tours.</div>'; }
+  else {
+    var html='<table><thead><tr><th>Date</th><th>Tour</th><th>Channel</th><th>Gross</th><th>Expected net</th><th>Status</th><th>Paid date</th><th>Received</th><th></th></tr></thead><tbody>';
+    tourData.forEach(function(t){
+      var paid=!!t.paidDate;
+      var netExp=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100;
+      var product=t.product||'Miami Wow Tour';
+      var pb=product==='Little Havana After Dark'?'<span class="badge b-purple" style="font-size:10px;">LH After Dark</span>':'<span class="badge b-teal" style="font-size:10px;">MWT</span>';
+      html+='<tr><td style="white-space:nowrap;font-size:12px;">'+fmt(t.date)+'</td><td>'+pb+'</td><td>'+badge(t.channel)+'</td>';
+      html+='<td class="mono" style="font-size:12px;">$'+t.gross.toFixed(2)+'</td>';
+      html+='<td class="mono pos" style="font-size:12px;font-weight:600;">$'+netExp.toFixed(2)+'</td>';
+      html+='<td>'+(paid?'<span class="badge b-green">Paid</span>':'<span class="badge b-yellow">Pending</span>')+'</td>';
+      html+='<td style="font-size:12px;color:var(--text2);">'+(paid?fmt(t.paidDate):'&mdash;')+'</td>';
+      html+='<td class="mono" style="font-size:12px;color:'+(paid?'var(--teal)':'var(--text3)')+';">'+(paid?'$'+(t.paidAmount||0).toFixed(2):'&mdash;')+'</td>';
+   //]]>
+</script>E html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Miami Wow Tours Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f7f6f2;--surface:#fff;--border:rgba(0,0,0,0.1);--border-strong:rgba(0,0,0,0.18);--text:#1a1a1a;--text2:#666;--text3:#999;--teal:#0f6e56;--teal-l:#e1f5ee;--teal-m:#1d9e75;--amber:#ba7517;--amber-l:#faeeda;--blue:#185fa5;--blue-l:#e6f1fb;--purple:#534ab7;--purple-l:#eeedfe;--coral:#d85a30;--coral-l:#faece7;--red:#a32d2d;--red-l:#fcebeb;--r:10px;--rs:6px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh;}
+.topbar{background:#0a1628;color:#fff;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;}
+.topbar-brand{font-size:14px;font-weight:600;letter-spacing:.04em;}
+.topbar-brand span{color:#4dd9a8;}
+.topbar-year{font-size:12px;color:rgba(255,255,255,.45);font-family:'DM Mono',monospace;}
+.topbar button{background:none;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6);padding:5px 12px;border-radius:var(--rs);font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.nav-bar{background:var(--surface);border-bottom:1px solid var(--border);display:flex;padding:0 1.5rem;gap:4px;flex-wrap:wrap;}
+.nav-btn{padding:12px 14px;font-size:13px;font-weight:500;color:var(--text2);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
+.nav-btn:hover{color:var(--text);}
+.nav-btn.active{color:var(--teal-m);border-bottom-color:var(--teal-m);}
+.main{max-width:1100px;margin:0 auto;padding:1.5rem;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.25rem;margin-bottom:1rem;}
+.card-title{font-size:14px;font-weight:600;margin-bottom:1rem;}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1.25rem;}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;}
+.metric-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:6px;}
+.metric-value{font-size:24px;font-weight:600;font-family:'DM Mono',monospace;}
+.metric-value.green{color:var(--teal);}
+.metric-value.red{color:var(--red);}
+.metric-value.amber{color:var(--amber);}
+.form-grid{display:grid;gap:12px;margin-bottom:12px;}
+.form-grid.g2{grid-template-columns:1fr 1fr;}
+.form-grid.g3{grid-template-columns:1fr 1fr 1fr;}
+.field{display:flex;flex-direction:column;gap:5px;}
+.field label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);}
+.field input,.field select{padding:9px 12px;border:1px solid var(--border-strong);border-radius:var(--rs);font-size:14px;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);outline:none;transition:border-color .15s;}
+.field input:focus,.field select:focus{border-color:var(--teal-m);background:#fff;}
+.calc-box{background:var(--bg);border-radius:var(--rs);padding:1rem;margin:1rem 0;border:1px solid var(--border);}
+.calc-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text3);margin-bottom:10px;}
+.calc-row{display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:var(--text2);}
+.calc-row.total{font-weight:600;color:var(--text);border-top:1px solid var(--border);margin-top:8px;padding-top:10px;font-size:15px;}
+.btn-primary{background:var(--teal-m);color:#fff;border:none;padding:10px 22px;border-radius:var(--rs);font-size:14px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;transition:opacity .15s;}
+.btn-primary:hover{opacity:.87;}
+.btn-secondary{background:none;border:1px solid var(--border-strong);padding:9px 18px;border-radius:var(--rs);font-size:13px;color:var(--text2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s;}
+.btn-secondary:hover{background:var(--bg);color:var(--text);}
+.btn-sm{padding:5px 12px;font-size:12px;}
+.btn-danger{background:none;border:none;color:var(--red);cursor:pointer;font-size:12px;padding:4px 8px;border-radius:var(--rs);font-family:'DM Sans',sans-serif;}
+.btn-danger:hover{background:var(--red-l);}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th{text-align:left;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
+td{padding:10px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle;}
+tr:last-child td{border-bottom:none;}
+tbody tr:hover td{background:var(--bg);}
+tfoot td{background:var(--bg);font-weight:600;}
+.badge{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.b-teal{background:var(--teal-l);color:var(--teal);}
+.b-blue{background:var(--blue-l);color:var(--blue);}
+.b-coral{background:var(--coral-l);color:var(--coral);}
+.b-amber{background:var(--amber-l);color:var(--amber);}
+.b-purple{background:var(--purple-l);color:var(--purple);}
+.b-dark{background:#0a1628;color:#4dd9a8;}
+.b-gray{background:#f1efe8;color:#444441;}
+.b-green{background:var(--teal-l);color:var(--teal);}
+.b-yellow{background:var(--amber-l);color:var(--amber);}
+.channel-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;}
+.ch-card{background:var(--bg);border-radius:var(--rs);padding:1rem;border:1px solid var(--border);}
+.ch-name{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:6px;}
+.ch-val{font-size:18px;font-weight:600;font-family:'DM Mono',monospace;}
+.ch-count{font-size:11px;color:var(--text3);margin-top:3px;}
+.mfilters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1rem;}
+.mbtn{padding:5px 13px;border:1px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;background:none;color:var(--text2);font-family:'DM Sans',sans-serif;transition:all .15s;}
+.mbtn.active{background:var(--teal-m);color:#fff;border-color:var(--teal-m);}
+.empty{text-align:center;padding:2.5rem;color:var(--text3);font-size:14px;}
+.mono{font-family:'DM Mono',monospace;}
+.pos{color:var(--teal);font-weight:600;font-family:'DM Mono',monospace;}
+.neg{color:var(--red);font-weight:600;font-family:'DM Mono',monospace;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--teal);color:#fff;padding:12px 20px;border-radius:var(--r);font-size:13px;font-weight:500;z-index:9999;display:none;}
+.view{display:none;}
+.view.active{display:block;}
+.sec-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;flex-wrap:wrap;gap:8px;}
+.sec-title{font-size:18px;font-weight:600;}
+.sel{padding:7px 12px;border:1px solid var(--border-strong);border-radius:var(--rs);background:var(--surface);color:var(--text);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;}
+.modal-bg{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.45);z-index:200;align-items:center;justify-content:center;}
+.modal-box{background:var(--surface);border-radius:var(--r);padding:1.5rem;width:100%;max-width:380px;margin:1rem;}
+@media(max-width:700px){.metrics{grid-template-columns:1fr 1fr;}.form-grid.g3{grid-template-columns:1fr 1fr;}.channel-grid{grid-template-columns:1fr 1fr;}.main{padding:1rem;}}
+</style>
+</head>
+<body>
+
+<div id="login-screen" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#0a1628;z-index:500;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:2.5rem;width:100%;max-width:360px;text-align:center;">
+    <div style="font-size:13px;font-weight:600;letter-spacing:.12em;color:var(--text2);text-transform:uppercase;margin-bottom:6px;">Miami Wow Tours</div>
+    <div style="font-size:22px;font-weight:600;margin-bottom:8px;">Manager Portal</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1.5rem;">Enter your password to continue</div>
+    <input type="password" id="pw-input" placeholder="password" style="width:100%;padding:12px 14px;border:1px solid var(--border-strong);border-radius:var(--rs);font-size:15px;text-align:center;outline:none;margin-bottom:12px;background:var(--bg);" onkeydown="if(event.key==='Enter')doLogin()">
+    <button onclick="doLogin()" style="width:100%;padding:12px;background:var(--teal-m);color:#fff;border:none;border-radius:var(--rs);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;">Sign in</button>
+    <div id="pw-error" style="color:var(--red);font-size:13px;margin-top:10px;display:none;">Incorrect password. Try again.</div>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="topbar-brand">Miami <span>Wow</span> Tours</div>
+  <div class="topbar-year">2026</div>
+  <button onclick="logout()">Sign out</button>
+</div>
+
+<div class="nav-bar">
+  <button class="nav-btn active" onclick="showView('dashboard')">Dashboard</button>
+  <button class="nav-btn" onclick="showView('log')">Log a tour</button>
+  <button class="nav-btn" onclick="showView('tours')">Tour history</button>
+  <button class="nav-btn" onclick="showView('guides')">Guides</button>
+  <button class="nav-btn" onclick="showView('payreport')">Pay report</button>
+  <button class="nav-btn" onclick="showView('payments')">Payments</button>
+  <button class="nav-btn" onclick="showView('expenses')">Expenses</button>
+  <button class="nav-btn" onclick="showView('reconcile')">Bank reconciliation</button>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:6px;padding:8px 0;">
+    <button class="btn-secondary btn-sm" onclick="exportBackup()" style="font-size:11px;padding:5px 10px;">Export backup</button>
+    <label class="btn-secondary btn-sm" style="font-size:11px;padding:5px 10px;cursor:pointer;margin:0;">Import backup<input type="file" id="import-file" accept=".json" style="display:none;" onchange="importBackup(event)"></label>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- DASHBOARD -->
+<div id="view-dashboard" class="view active">
+  <div class="sec-header">
+    <div class="sec-title">Overview</div>
+    <select class="sel" id="dash-month" onchange="renderDashboard()">
+      <option value="all">All of 2026</option>
+      <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+      <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+      <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+      <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+    </select>
+  </div>
+  <div class="metrics">
+    <div class="metric"><div class="metric-label">Tours run</div><div class="metric-value" id="d-tours">0</div></div>
+    <div class="metric"><div class="metric-label">Total guests</div><div class="metric-value" id="d-guests">0</div></div>
+    <div class="metric"><div class="metric-label">Gross revenue</div><div class="metric-value" id="d-gross">$0</div></div>
+    <div class="metric"><div class="metric-label">Net profit</div><div class="metric-value green" id="d-profit">$0</div></div>
+  </div>
+  <div class="metrics" style="margin-top:-4px;">
+    <div class="metric"><div class="metric-label">Total received</div><div class="metric-value green" id="d-received">$0</div></div>
+    <div class="metric"><div class="metric-label">Outstanding</div><div class="metric-value amber" id="d-outstanding">$0</div></div>
+    <div class="metric"><div class="metric-label">Tours unpaid</div><div class="metric-value amber" id="d-unpaid">0</div></div>
+    <div class="metric"><div class="metric-label">Vendor payments</div><div class="metric-value" id="d-venpay">0</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Revenue by channel (net of commission)</div>
+    <div class="channel-grid" id="channel-grid"></div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:1.25rem 1.25rem .75rem;border-bottom:1px solid var(--border);font-size:14px;font-weight:600;">Recent tours</div>
+    <div class="table-wrap" id="recent-table"></div>
+  </div>
+</div>
+
+<!-- LOG TOUR -->
+<div id="view-log" class="view">
+  <div class="sec-title" style="margin-bottom:1rem;">Log a new tour</div>
+  <div class="card">
+    <div class="form-grid g2">
+      <div class="field"><label>Tour</label>
+        <select id="f-product" onchange="calcTour()">
+          <option value="Miami Wow Tour">Miami Wow Tour</option>
+          <option value="Little Havana After Dark">Little Havana After Dark</option>
+        </select>
+      </div>
+      <div class="field"><label>Date</label><input type="date" id="f-date"></div>
+    </div>
+    <div class="form-grid g2">
+      <div class="field"><label>Tour type</label>
+        <select id="f-type" onchange="calcTour()">
+          <option value="regular">Regular tour</option>
+          <option value="private">Private tour ($500 flat)</option>
+        </select>
+      </div>
+      <div class="field"><label>Guide</label>
+        <select id="f-guide" onchange="calcTour()">
+          <option value="Noel">Noel</option><option value="Hugo">Hugo</option><option value="Lanny">Lanny</option>
+          <option value="Yari">Yari</option><option value="Raul">Raul</option><option value="Joanna">Joanna</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-grid g3">
+      <div class="field"><label id="f-adults-label">Adults ($62)</label><input type="number" id="f-adults" min="0" value="0" oninput="calcTour()"></div>
+      <div class="field"><label id="f-children-label">Children 7-12 ($47)</label><input type="number" id="f-children" min="0" value="0" oninput="calcTour()"></div>
+      <div class="field"><label>Under 7 (free)</label><input type="number" id="f-infants" min="0" value="0" oninput="calcTour()"></div>
+    </div>
+    <div class="form-grid g2">
+      <div class="field"><label>Booking channel</label>
+        <select id="f-channel" onchange="calcTour()">
+          <option value="Fareharbor">Fareharbor (2.9%)</option>
+          <option value="TripAdvisor">TripAdvisor (32%)</option>
+          <option value="Airbnb">Airbnb (20%)</option>
+          <option value="GYG">GetYourGuide (25%)</option>
+          <option value="Civitatis">Civitatis (25%)</option>
+        </select>
+      </div>
+      <div class="field"><label>Other expenses ($)</label><input type="number" id="f-expenses" min="0" value="0" oninput="calcTour()" placeholder="0"></div>
+    </div>
+    <div class="field" style="margin-bottom:12px;"><label>Notes (optional)</label><input type="text" id="f-notes" placeholder="e.g. great group..."></div>
+    <div class="calc-box">
+      <div class="calc-label">Breakdown</div>
+      <div class="calc-row"><span>Gross revenue</span><span class="mono" id="c-gross">$0.00</span></div>
+      <div class="calc-row"><span>Channel commission</span><span class="mono" style="color:var(--red);" id="c-comm">-$0.00</span></div>
+      <div class="calc-row" id="c-fhproc-row"><span>FH bank fee (2% — all channels)</span><span class="mono" style="color:var(--red);" id="c-fhproc">-$0.00</span></div>
+      <div class="calc-row" id="c-fhflat-row"><span>FH flat fee</span><span class="mono" style="color:var(--red);">-$0.30</span></div>
+      <div class="calc-row"><span>Guide pay</span><span class="mono" style="color:var(--red);" id="c-guide">-$0.00</span></div>
+      <div class="calc-row" id="c-drinks-row"><span>Soft drinks ($1/guest)</span><span class="mono" style="color:var(--amber);" id="c-drinks">-$0.00</span></div>
+      <div class="calc-row"><span>Other expenses</span><span class="mono" style="color:var(--red);" id="c-exp">$0.00</span></div>
+      <div class="calc-row total"><span>Net profit</span><span class="mono" id="c-profit">$0.00</span></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button class="btn-primary" onclick="logTour()">Save tour</button>
+      <button class="btn-secondary" onclick="clearForm()">Clear</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOUR HISTORY -->
+<div id="view-tours" class="view">
+  <div class="sec-header">
+    <div class="sec-title">Tour history</div>
+    <button class="btn-secondary btn-sm" onclick="exportCSV()">Export CSV</button>
+  </div>
+  <div class="mfilters" id="month-filters"></div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div class="table-wrap" id="tours-table"></div>
+  </div>
+</div>
+
+<!-- GUIDES -->
+<div id="view-guides" class="view">
+  <div class="sec-title" style="margin-bottom:1rem;">Guide performance 2026</div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div class="table-wrap" id="guides-table"></div>
+  </div>
+  <div class="card" style="margin-top:1rem;">
+    <div class="card-title">Pay rate reference</div>
+    <table>
+      <thead><tr><th>Guide</th><th>Under 4 guests</th><th>4+ guests</th><th>Private</th></tr></thead>
+      <tbody>
+        <tr><td style="font-weight:600;">Noel</td><td>$75</td><td>$100</td><td>$80</td></tr>
+        <tr><td style="font-weight:600;">Hugo</td><td>$60</td><td>$75</td><td>$80</td></tr>
+        <tr><td style="font-weight:600;">Lanny</td><td>$60</td><td>$75</td><td>$80</td></tr>
+        <tr><td style="font-weight:600;">Yari</td><td>$60</td><td>$75</td><td>$80</td></tr>
+        <tr><td style="font-weight:600;">Raul</td><td>$60</td><td>$75</td><td>$80</td></tr>
+        <tr><td style="font-weight:600;">Joanna</td><td>$60</td><td>$75</td><td>$80</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PAY REPORT -->
+<div id="view-payreport" class="view">
+  <div class="sec-header">
+    <div class="sec-title">Guide pay report</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <select class="sel" id="pr-month" onchange="renderPayReport()">
+        <option value="all">All of 2026</option>
+        <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+        <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+        <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+        <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+      </select>
+      <select class="sel" id="pr-guide" onchange="renderPayReport()">
+        <option value="all">All guides</option>
+        <option value="Noel">Noel</option><option value="Hugo">Hugo</option><option value="Lanny">Lanny</option>
+        <option value="Yari">Yari</option><option value="Raul">Raul</option><option value="Joanna">Joanna</option>
+      </select>
+      <button class="btn-secondary btn-sm" onclick="exportPayCSV()">Export CSV</button>
+    </div>
+  </div>
+  <div id="pr-summary" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:1.25rem;"></div>
+  <div id="pr-content"></div>
+</div>
+
+<!-- PAYMENTS -->
+<div id="view-payments" class="view">
+  <div class="sec-header">
+    <div class="sec-title">Payment tracker</div>
+    <select class="sel" id="pay-mf" onchange="renderPayments()">
+      <option value="all">All months</option>
+      <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+      <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+      <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+      <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+    </select>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+    <div class="card" style="margin-bottom:0;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+        <div class="card-title" style="margin-bottom:0;">Tour payments</div>
+        <div id="tour-pay-summary" style="font-size:12px;color:var(--text2);"></div>
+      </div>
+      <div class="table-wrap" id="tour-pay-table"></div>
+    </div>
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-title">Log a vendor payment</div>
+      <div class="form-grid g2" style="margin-bottom:12px;">
+        <div class="field"><label>Vendor</label>
+          <select id="vp-channel">
+            <option value="Fareharbor">Fareharbor</option><option value="TripAdvisor">TripAdvisor</option>
+            <option value="Airbnb">Airbnb</option><option value="GYG">GetYourGuide</option>
+            <option value="Civitatis">Civitatis</option>
+          </select>
+        </div>
+        <div class="field"><label>Payment date</label><input type="date" id="vp-date"></div>
+      </div>
+      <div class="form-grid g2" style="margin-bottom:12px;">
+        <div class="field"><label>Amount received ($)</label><input type="number" id="vp-amount" min="0" step="0.01" placeholder="0.00"></div>
+        <div class="field"><label>Notes (optional)</label><input type="text" id="vp-notes" placeholder="e.g. covers Jan 1-15"></div>
+      </div>
+      <button class="btn-primary" onclick="logVendorPayment()">Save payment</button>
+      <div style="margin-top:1.25rem;border-top:1px solid var(--border);padding-top:1rem;">
+        <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Vendor payment history</div>
+        <div class="table-wrap" id="vendor-pay-table"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPENSES -->
+<div id="view-expenses" class="view">
+  <div class="sec-header">
+    <div class="sec-title">Expense ledger 2026</div>
+    <div style="display:flex;gap:8px;">
+      <select class="sel" id="exp-mf" onchange="renderExpenses()">
+        <option value="all">All months</option>
+        <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+        <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+        <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+        <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+      </select>
+      <button class="btn-secondary btn-sm" onclick="exportExpCSV()">Export CSV</button>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:320px 1fr;gap:1rem;align-items:start;">
+    <div class="card" style="margin-bottom:0;">
+      <div class="card-title">Add an expense</div>
+      <div class="field" style="margin-bottom:12px;"><label>Date</label><input type="date" id="exp-date"></div>
+      <div class="field" style="margin-bottom:12px;"><label>Amount ($)</label><input type="number" id="exp-amount" min="0" step="0.01" placeholder="0.00"></div>
+      <div class="field" style="margin-bottom:12px;"><label>Description</label><input type="text" id="exp-desc" placeholder="e.g. Insurance, Hugo salary Jan..."></div>
+      <div class="field" style="margin-bottom:16px;"><label>Paid by</label>
+        <select id="exp-paidby">
+          <option value="Bank transfer">Bank transfer</option><option value="Zelle">Zelle</option>
+          <option value="Credit card">Credit card</option><option value="Cash">Cash</option>
+          <option value="Check">Check</option><option value="Other">Other</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="addExpense()" style="width:100%;">Add expense</button>
+    </div>
+    <div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:1rem;">
+        <div class="metric"><div class="metric-label">Year total</div><div class="metric-value red" id="exp-total">$0</div></div>
+        <div class="metric"><div class="metric-label">Period total</div><div class="metric-value" id="exp-period">$0</div></div>
+        <div class="metric"><div class="metric-label">Entries</div><div class="metric-value" id="exp-count">0</div></div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div class="table-wrap" id="expenses-table"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BANK RECONCILIATION -->
+<div id="view-reconcile" class="view">
+  <div class="sec-header">
+    <div class="sec-title">Bank reconciliation</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <select class="sel" id="rec-month" onchange="renderReconcile()">
+        <option value="all">All of 2026</option>
+        <option value="0">January</option><option value="1">February</option><option value="2">March</option>
+        <option value="3">April</option><option value="4">May</option><option value="5">June</option>
+        <option value="6">July</option><option value="7">August</option><option value="8">September</option>
+        <option value="9">October</option><option value="10">November</option><option value="11">December</option>
+      </select>
+      <button class="btn-secondary btn-sm" onclick="exportReconcileCSV()">Export CSV</button>
+    </div>
+  </div>
+  <div id="rec-summary-cards" style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1.25rem;"></div>
+  <div class="card" style="padding:0;overflow:hidden;margin-bottom:1rem;">
+    <div style="padding:1rem 1.25rem .75rem;border-bottom:1px solid var(--border);font-size:14px;font-weight:600;">Summary by vendor</div>
+    <div class="table-wrap" id="rec-vendor-summary"></div>
+  </div>
+  <div class="card" style="padding:0;overflow:hidden;">
+    <div style="padding:1rem 1.25rem .75rem;border-bottom:1px solid var(--border);font-size:14px;font-weight:600;">Deposit detail — chronological</div>
+    <div class="table-wrap" id="rec-detail"></div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<!-- Edit tour modal -->
+<div id="edit-modal-bg" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:300;overflow-y:auto;">
+  <div style="background:var(--surface);border-radius:var(--r);padding:1.5rem;width:90%;max-width:480px;margin:2rem auto;">
+    <div style="font-size:17px;font-weight:600;margin-bottom:1.25rem;color:var(--text);">Edit tour</div>
+    <div class="field" style="margin-bottom:12px;"><label>Tour product</label>
+      <select id="em-product" onchange="previewEdit()">
+        <option value="Miami Wow Tour">Miami Wow Tour</option>
+        <option value="Little Havana After Dark">Little Havana After Dark</option>
+      </select>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field"><label>Date</label><input type="date" id="em-date"></div>
+      <div class="field"><label>Tour type</label>
+        <select id="em-type" onchange="previewEdit()">
+          <option value="regular">Regular tour</option>
+          <option value="private">Private tour ($500)</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field"><label>Guide</label>
+        <select id="em-guide" onchange="previewEdit()">
+          <option value="Noel">Noel</option><option value="Hugo">Hugo</option><option value="Lanny">Lanny</option>
+          <option value="Yari">Yari</option><option value="Raul">Raul</option><option value="Joanna">Joanna</option>
+        </select>
+      </div>
+      <div class="field"><label>Booking channel</label>
+        <select id="em-channel" onchange="previewEdit()">
+          <option value="Fareharbor">Fareharbor (2.9%)</option>
+          <option value="TripAdvisor">TripAdvisor (32%)</option>
+          <option value="Airbnb">Airbnb (20%)</option>
+          <option value="GYG">GetYourGuide (25%)</option>
+          <option value="Civitatis">Civitatis (25%)</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field"><label id="em-adults-label">Adults ($62)</label><input type="number" id="em-adults" min="0" oninput="previewEdit()"></div>
+      <div class="field"><label id="em-children-label">Children ($47)</label><input type="number" id="em-children" min="0" oninput="previewEdit()"></div>
+      <div class="field"><label>Under 7 (free)</label><input type="number" id="em-infants" min="0" oninput="previewEdit()"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field"><label>Other expenses ($)</label><input type="number" id="em-expenses" min="0" value="0" oninput="previewEdit()" placeholder="0.00" step="0.01"></div>
+      <div class="field"><label>Notes</label><input type="text" id="em-notes" placeholder="optional"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field">
+        <label>Guide pay override ($)</label>
+        <input type="number" id="em-guidepay" min="0" value="" oninput="previewEdit()" placeholder="Auto — leave blank" step="0.01">
+      </div>
+      <div style="display:flex;align-items:flex-end;padding-bottom:2px;">
+        <div style="font-size:12px;color:var(--text3);line-height:1.4;">Auto-calc: based on guest count &amp; guide rates. Enter a value here to override it.</div>
+      </div>
+    </div>
+    <div class="calc-box" style="margin-bottom:1rem;">
+      <div class="calc-label">Recalculated breakdown</div>
+      <div class="calc-row"><span>Gross revenue</span><span class="mono" id="em-gross">$0.00</span></div>
+      <div class="calc-row"><span>Channel commission</span><span class="mono" style="color:var(--red);" id="em-comm">-$0.00</span></div>
+      <div class="calc-row" id="em-fhflat-row"><span>FH flat fee ($0.30)</span><span class="mono" style="color:var(--red);">-$0.30</span></div>
+      <div class="calc-row" id="em-fhproc-row"><span>FH bank fee (2%)</span><span class="mono" style="color:var(--red);" id="em-fhproc">-$0.00</span></div>
+      <div class="calc-row"><span>Guide pay</span><span class="mono" style="color:var(--red);" id="em-guide-pay">-$0.00</span></div>
+      <div class="calc-row" id="em-drinks-row"><span>Soft drinks ($1/guest)</span><span class="mono" style="color:var(--amber);" id="em-drinks">-$0.00</span></div>
+      <div class="calc-row"><span>Other expenses</span><span class="mono" style="color:var(--red);" id="em-exp">$0.00</span></div>
+      <div class="calc-row total"><span>Net profit</span><span class="mono" id="em-profit">$0.00</span></div>
+    </div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-primary" onclick="saveEdit()">Save changes</button>
+      <button class="btn-secondary" onclick="closeEditModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Mark-paid modal -->
+<div class="modal-bg" id="pay-modal-bg" style="display:none;align-items:center;justify-content:center;">
+  <div class="modal-box">
+    <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Mark tour as paid</div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:1rem;" id="modal-label"></div>
+    <div class="form-grid g2">
+      <div class="field"><label>Payment date</label><input type="date" id="modal-date"></div>
+      <div class="field"><label>Amount received ($)</label><input type="number" id="modal-amount" min="0" step="0.01"></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:1rem;">
+      <button class="btn-primary" onclick="savePayment()">Save</button>
+      <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div id="loading-overlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,22,40,0.85);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+  <div style="color:#fff;font-size:16px;font-weight:500;font-family:'DM Sans',sans-serif;" id="loading-msg">Loading...</div>
+  <div style="width:40px;height:40px;border:3px solid rgba(255,255,255,0.2);border-top-color:#4dd9a8;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+</div>
+<style>@keyframes spin{to{transform:rotate(360deg);}}</style>
+
+<script>
+//<![CDATA[
+var SB_URL = 'https://djvzoqpgvxcezsxqlvuf.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqdnpvcXBndnhjZXpzeHFsdnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3Nzk3MjYsImV4cCI6MjA5MTM1NTcyNn0._54P3DYTinP4t5yKjUX3tkGsVKEJLjA4APggq_F8VF4';
+var PASSWORD = 'palante2022';
+
+async function sbFetch(method, table, body, query) {
+  var url = SB_URL + '/rest/v1/' + table + (query || '');
+  var headers = {
+    'apikey': SB_KEY,
+    'Authorization': 'Bearer ' + SB_KEY,
+    'Content-Type': 'application/json'
+  };
+  if (method === 'POST') headers['Prefer'] = 'resolution=merge-duplicates';
+  if (method === 'GET') headers['Accept'] = 'application/json';
+  var opts = { method: method, headers: headers };
+  if (body) opts.body = JSON.stringify(body);
+  var res = await fetch(url, opts);
+  if (!res.ok) { console.error('Supabase error:', res.status, await res.text()); return method === 'GET' ? [] : false; }
+  if (method === 'GET') return await res.json();
+  return true;
+}
+
+function tourToRow(t) {
+  var vnet = (t.vendorNet && t.vendorNet > 0) ? t.vendorNet : Math.round(((t.gross||0) - (t.comm||0) - (t.fhFlat||0)) * 100) / 100;
+  return {
+    id: t.id, date: t.date, product: t.product || 'Miami Wow Tour',
+    type: t.type, guide: t.guide, channel: t.channel,
+    adults: t.adults || 0, children: t.children || 0, infants: t.infants || 0,
+    pax: t.pax || t.totalPax || 0,
+    gross: t.gross || 0, comm: t.comm || 0,
+    fh_flat: t.fhFlat || 0, fh_proc: t.fhProc || 0,
+    vendor_net: vnet, guide_pay: t.guidePay || 0,
+    drinks: t.drinks || 0, other_exp: t.otherExp || 0,
+    profit: t.profit || 0, notes: t.notes || '',
+    paid_date: t.paidDate || null, paid_amount: t.paidAmount || null
+  };
+}
+
+function rowToTour(r) {
+  return {
+    id: r.id, date: r.date, product: r.product || 'Miami Wow Tour',
+    type: r.type, guide: r.guide, channel: r.channel,
+    adults: r.adults, children: r.children, infants: r.infants,
+    pax: r.pax, gross: parseFloat(r.gross), comm: parseFloat(r.comm),
+    fhFlat: parseFloat(r.fh_flat), fhProc: parseFloat(r.fh_proc),
+    vendorNet: (parseFloat(r.vendor_net) > 0) ? parseFloat(r.vendor_net) : Math.round((parseFloat(r.gross||0) - parseFloat(r.comm||0) - parseFloat(r.fh_flat||0)) * 100) / 100,
+    guidePay: parseFloat(r.guide_pay),
+    drinks: parseFloat(r.drinks), otherExp: parseFloat(r.other_exp),
+    profit: parseFloat(r.profit), notes: r.notes,
+    paidDate: r.paid_date, paidAmount: r.paid_amount ? parseFloat(r.paid_amount) : null
+  };
+}
+
+function vpToRow(p) { return { id: p.id, channel: p.channel, date: p.date, amount: p.amount, notes: p.notes || '' }; }
+function rowToVP(r) { return { id: r.id, channel: r.channel, date: r.date, amount: parseFloat(r.amount), notes: r.notes }; }
+function expToRow(e) { return { id: e.id, date: e.date, amount: e.amount, description: e.desc, paid_by: e.paidby }; }
+function rowToExp(r) { return { id: r.id, date: r.date, amount: parseFloat(r.amount), desc: r.description, paidby: r.paid_by }; }
+
+var TOURS = {
+  'Miami Wow Tour': {adultPrice: 62, childPrice: 47, hasPrivate: true, privatePrice: 500, startTime: '11:00AM'},
+  'Little Havana After Dark': {adultPrice: 72, childPrice: 72, hasPrivate: false, privatePrice: 0, startTime: '6:30PM'}
+};
+var CHANNELS = {
+  Fareharbor: {rate:0.029, label:'Fareharbor', badge:'b-teal'},
+  TripAdvisor: {rate:0.32,  label:'TripAdvisor', badge:'b-blue'},
+  Airbnb:      {rate:0.20,  label:'Airbnb',      badge:'b-coral'},
+  GYG:         {rate:0.25,  label:'GetYourGuide', badge:'b-amber'},
+  Civitatis:   {rate:0.25,  label:'Civitatis',   badge:'b-purple'}
+};
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var FULLMONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+var DRINK = 1.00, FH_PROC = 0.02, FH_FLAT = 0.30;
+var tours = [], vendorPayments = [], expenses = [], filterMonth = 'all', modalTourId = null;
+
+function doLogin() {
+  var val = document.getElementById('pw-input').value;
+  if (val === PASSWORD) {
+    document.getElementById('login-screen').style.display = 'none';
+    localStorage.setItem('mwt-auth', '1');
+    loadAll();
+  } else {
+    document.getElementById('pw-error').style.display = 'block';
+    document.getElementById('pw-input').value = '';
+  }
+}
+
+function logout() {
+  localStorage.removeItem('mwt-auth');
+  document.getElementById('pw-input').value = '';
+  document.getElementById('pw-error').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+}
+
+function calcTourData(adults, children, infants, guide, channel, type, otherExp, product) {
+  var tour = TOURS[product] || TOURS['Miami Wow Tour'];
+  var gross = type === 'private' ? tour.privatePrice : (adults * tour.adultPrice + children * tour.childPrice);
+  var pax = adults + children + infants;
+  var comm = Math.round(gross * CHANNELS[channel].rate * 100) / 100;
+  var fhFlat = channel === 'Fareharbor' ? FH_FLAT : 0;
+  var vendorNet = Math.round((gross - comm - fhFlat) * 100) / 100;
+  var fhProc = Math.round(gross * FH_PROC * 100) / 100;
+  var guidePay;
+  if (type === 'private') { guidePay = 80; }
+  else if (guide === 'Noel') { guidePay = pax < 4 ? 75 : 100; }
+  else { guidePay = pax < 4 ? 60 : 75; }
+  var drinks = product === 'Miami Wow Tour' ? Math.round(pax * DRINK * 100) / 100 : 0;
+  var exp = parseFloat(otherExp) || 0;
+  var profit = Math.round((gross - comm - fhFlat - fhProc - guidePay - drinks - exp) * 100) / 100;
+  return {gross:gross, comm:comm, fhFlat:fhFlat, fhProc:fhProc, vendorNet:vendorNet, guidePay:guidePay, drinks:drinks, otherExp:exp, profit:profit, pax:pax};
+}
+
+function calcTour() {
+  var adults = parseInt(document.getElementById('f-adults').value) || 0;
+  var children = parseInt(document.getElementById('f-children').value) || 0;
+  var infants = parseInt(document.getElementById('f-infants').value) || 0;
+  var guide = document.getElementById('f-guide').value;
+  var channel = document.getElementById('f-channel').value;
+  var type = document.getElementById('f-type').value;
+  var exp = parseFloat(document.getElementById('f-expenses').value) || 0;
+  var product = document.getElementById('f-product').value;
+  var tour = TOURS[product] || TOURS['Miami Wow Tour'];
+  var typeEl = document.getElementById('f-type');
+  var privateOpt = typeEl ? typeEl.querySelector('option[value="private"]') : null;
+  if (privateOpt) privateOpt.disabled = !tour.hasPrivate;
+  if (!tour.hasPrivate && type === 'private') { if(typeEl) typeEl.value = 'regular'; type = 'regular'; }
+  document.getElementById('f-adults-label').textContent = 'Adults ($' + tour.adultPrice + ')';
+  document.getElementById('f-children-label').textContent = 'Children 7-12 ($' + tour.childPrice + ')';
+  var d = calcTourData(adults, children, infants, guide, channel, type, exp, product);
+  document.getElementById('c-gross').textContent = '$' + d.gross.toFixed(2);
+  document.getElementById('c-comm').textContent = '-$' + d.comm.toFixed(2) + ' (' + Math.round(CHANNELS[channel].rate * 100) + '%)';
+  document.getElementById('c-fhproc').textContent = '-$' + d.fhProc.toFixed(2);
+  document.getElementById('c-fhflat-row').style.display = channel === 'Fareharbor' ? 'flex' : 'none';
+  document.getElementById('c-fhproc-row').style.display = channel === 'Fareharbor' ? 'none' : 'flex';
+  document.getElementById('c-guide').textContent = '-$' + d.guidePay.toFixed(2);
+  document.getElementById('c-drinks-row').style.display = product === 'Miami Wow Tour' ? 'flex' : 'none';
+  document.getElementById('c-drinks').textContent = '-$' + d.drinks.toFixed(2) + ' (' + d.pax + ' x $1)';
+  document.getElementById('c-exp').textContent = exp > 0 ? '-$' + exp.toFixed(2) : '$0.00';
+  var pel = document.getElementById('c-profit');
+  pel.textContent = (d.profit < 0 ? '-$' + Math.abs(d.profit).toFixed(2) : '$' + d.profit.toFixed(2));
+  pel.style.color = d.profit < 0 ? 'var(--red)' : 'var(--teal)';
+}
+
+function logTour() {
+  var date = document.getElementById('f-date').value;
+  if (!date) { toast('Please select a date.', true); return; }
+  var adults = parseInt(document.getElementById('f-adults').value) || 0;
+  var children = parseInt(document.getElementById('f-children').value) || 0;
+  var infants = parseInt(document.getElementById('f-infants').value) || 0;
+  var guide = document.getElementById('f-guide').value;
+  var channel = document.getElementById('f-channel').value;
+  var type = document.getElementById('f-type').value;
+  var exp = parseFloat(document.getElementById('f-expenses').value) || 0;
+  var notes = document.getElementById('f-notes').value;
+  var product = document.getElementById('f-product').value;
+  if (adults + children + infants === 0) { toast('Please enter at least 1 guest.', true); return; }
+  var d = calcTourData(adults, children, infants, guide, channel, type, exp, product);
+  var t = { id: Date.now(), date: date, adults: adults, children: children, infants: infants,
+    guide: guide, channel: channel, type: type, otherExp: exp, notes: notes, product: product,
+    gross: d.gross, comm: d.comm, fhProc: d.fhProc, fhFlat: d.fhFlat,
+    vendorNet: d.vendorNet, guidePay: d.guidePay, drinks: d.drinks, profit: d.profit, pax: d.pax };
+  tours.push(t); saveTours(); saveTour(t);
+  toast('Tour saved!'); clearForm(); showView('dashboard');
+}
+
+function clearForm() {
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('f-date').value = today;
+  document.getElementById('f-product').value = 'Miami Wow Tour';
+  document.getElementById('f-adults').value = 0;
+  document.getElementById('f-children').value = 0;
+  document.getElementById('f-infants').value = 0;
+  document.getElementById('f-expenses').value = 0;
+  document.getElementById('f-notes').value = '';
+  document.getElementById('f-type').value = 'regular';
+  calcTour();
+}
+
+function deleteTour(id) {
+  if (!confirm('Delete this tour? This cannot be undone.')) return;
+  tours = tours.filter(function(t) { return t.id !== id; });
+  saveTours(); deleteTourDB(id);
+  renderTours(); renderDashboard(); renderGuides();
+  toast('Tour deleted.');
+}
+
+async function saveTour(t) { await sbFetch('POST', 'tours', tourToRow(t), '?on_conflict=id'); }
+async function deleteTourDB(id) { await sbFetch('DELETE', 'tours', null, '?id=eq.' + id); }
+async function saveVPRecord(p) { await sbFetch('POST', 'vendor_payments', vpToRow(p), '?on_conflict=id'); }
+async function deleteVPDB(id) { await sbFetch('DELETE', 'vendor_payments', null, '?id=eq.' + id); }
+async function saveExpRecord(e) { await sbFetch('POST', 'expenses', expToRow(e), '?on_conflict=id'); }
+async function deleteExpDB(id) { await sbFetch('DELETE', 'expenses', null, '?id=eq.' + id); }
+function saveTours() { try { localStorage.setItem('mwt-tours-2026', JSON.stringify(tours)); } catch(e){} }
+function saveVP() { try { localStorage.setItem('mwt-vp-2026', JSON.stringify(vendorPayments)); } catch(e){} }
+function saveExp() { try { localStorage.setItem('mwt-exp-2026', JSON.stringify(expenses)); } catch(e){} }
+
+function showLoading(msg) { var el=document.getElementById('loading-overlay'); var ml=document.getElementById('loading-msg'); if(el) el.style.display='flex'; if(ml) ml.textContent=msg||'Loading...'; }
+function hideLoading() { var el=document.getElementById('loading-overlay'); if(el) el.style.display='none'; }
+
+async function loadAll() {
+  showLoading('Loading your data...');
+  var today = new Date().toISOString().split('T')[0];
+  document.getElementById('f-date').value = today;
+  document.getElementById('vp-date').value = today;
+  document.getElementById('exp-date').value = today;
+  try {
+    var tRows = await sbFetch('GET', 'tours', null, '?order=date.asc&limit=10000');
+    if (Array.isArray(tRows) && tRows.length > 0) { tours = tRows.map(rowToTour); saveTours(); }
+    else { var raw = localStorage.getItem('mwt-tours-2026'); tours = raw ? JSON.parse(raw) : []; }
+  } catch(e) { var raw = localStorage.getItem('mwt-tours-2026'); tours = raw ? JSON.parse(raw) : []; }
+  try {
+    var vpRows = await sbFetch('GET', 'vendor_payments', null, '?order=date.asc&limit=10000');
+    vendorPayments = Array.isArray(vpRows) ? vpRows.map(rowToVP) : []; saveVP();
+  } catch(e) { var vraw = localStorage.getItem('mwt-vp-2026'); vendorPayments = vraw ? JSON.parse(vraw) : []; }
+  try {
+    var eRows = await sbFetch('GET', 'expenses', null, '?order=date.asc&limit=10000');
+    expenses = Array.isArray(eRows) ? eRows.map(rowToExp) : []; saveExp();
+  } catch(e) { var eraw = localStorage.getItem('mwt-exp-2026'); expenses = eraw ? JSON.parse(eraw) : []; }
+  hideLoading(); renderDashboard(); renderTours(); renderGuides();
+}
+
+function getPax(t) { return t.pax || t.totalPax || 0; }
+function fmt(d) { var p=d.split('-'); return MONTHS[parseInt(p[1])-1]+' '+parseInt(p[2])+', '+p[0]; }
+function fmtM(d) { return new Date(d+'T00:00:00').getMonth(); }
+function ch(channel) { return CHANNELS[channel] || {label:channel, badge:'b-gray'}; }
+function badge(channel) { return '<span class="badge '+ch(channel).badge+'">'+ch(channel).label+'</span>'; }
+function typeBadge(type) { return type==='private'?'<span class="badge b-dark">Private</span>':'Regular'; }
+
+function toast(msg, isErr) {
+  var t=document.getElementById('toast');
+  t.textContent=msg; t.style.background=isErr?'var(--red)':'var(--teal)'; t.style.display='block';
+  setTimeout(function(){ t.style.display='none'; }, 3000);
+}
+
+function showView(v) {
+  var views=['dashboard','log','tours','guides','payreport','payments','expenses','reconcile'];
+  for(var i=0;i<views.length;i++){
+    var el=document.getElementById('view-'+views[i]); if(el) el.classList.remove('active');
+    var btn=document.querySelectorAll('.nav-btn')[i]; if(btn) btn.classList.remove('active');
+  }
+  var active=document.getElementById('view-'+v); if(active) active.classList.add('active');
+  var idx=views.indexOf(v); if(idx>=0){var ab=document.querySelectorAll('.nav-btn')[idx]; if(ab) ab.classList.add('active');}
+  if(v==='dashboard') renderDashboard();
+  if(v==='log') calcTour();
+  if(v==='tours') renderTours();
+  if(v==='guides') renderGuides();
+  if(v==='payreport') renderPayReport();
+  if(v==='payments') renderPayments();
+  if(v==='expenses') renderExpenses();
+  if(v==='reconcile') renderReconcile();
+}
+
+function filteredTours() {
+  if(filterMonth==='all') return tours;
+  return tours.filter(function(t){ return fmtM(t.date)===parseInt(filterMonth); });
+}
+
+function renderDashboard() {
+  var m=document.getElementById('dash-month').value;
+  var data=m==='all'?tours:tours.filter(function(t){ return fmtM(t.date)===parseInt(m); });
+  var gross=0,profit=0,guests=0;
+  data.forEach(function(t){
+    gross+=t.gross;
+    profit+=Math.round((t.gross-t.comm-(t.fhFlat||0)-(t.fhProc||0)-t.guidePay-(t.drinks||0)-(t.otherExp||0))*100)/100;
+    guests+=getPax(t);
+  });
+  var expF=m==='all'?expenses:expenses.filter(function(e){ return fmtM(e.date)===parseInt(m); });
+  profit=Math.round((profit-expF.reduce(function(s,e){ return s+e.amount; },0))*100)/100;
+  document.getElementById('d-tours').textContent=data.length;
+  document.getElementById('d-guests').textContent=guests;
+  document.getElementById('d-gross').textContent='$'+gross.toFixed(2);
+  var pel=document.getElementById('d-profit');
+  pel.textContent=(profit<0?'-$':'$')+Math.abs(profit).toFixed(2);
+  pel.className='metric-value '+(profit<0?'red':'green');
+  var paid=data.filter(function(t){ return t.paidDate; });
+  var unpaid=data.filter(function(t){ return !t.paidDate; });
+  var received=paid.reduce(function(s,t){ return s+(t.paidAmount||0); },0);
+  var outstanding=unpaid.reduce(function(s,t){ var net=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100; return s+net; },0);
+  var vpf=m==='all'?vendorPayments:vendorPayments.filter(function(p){ return fmtM(p.date)===parseInt(m); });
+  document.getElementById('d-received').textContent='$'+received.toFixed(2);
+  document.getElementById('d-outstanding').textContent='$'+outstanding.toFixed(2);
+  document.getElementById('d-unpaid').textContent=unpaid.length;
+  document.getElementById('d-venpay').textContent=vpf.length;
+  var chs={};
+  data.forEach(function(t){ if(!chs[t.channel]) chs[t.channel]={net:0,count:0}; chs[t.channel].net+=t.gross-t.comm; chs[t.channel].count++; });
+  var cgHtml='';
+  Object.keys(CHANNELS).forEach(function(c){
+    var v=chs[c];
+    cgHtml+='<div class="ch-card"><div class="ch-name">'+CHANNELS[c].label+'</div>';
+    cgHtml+='<div class="ch-val">'+(v?'$'+v.net.toFixed(2):'&mdash;')+'</div>';
+    cgHtml+='<div class="ch-count">'+(v?v.count+' tour'+(v.count!==1?'s':''):'No tours')+'</div></div>';
+  });
+  document.getElementById('channel-grid').innerHTML=cgHtml;
+  var last5=data.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); }).slice(0,5);
+  if(last5.length===0){ document.getElementById('recent-table').innerHTML='<div class="empty">No tours yet.</div>'; return; }
+  var rHtml='<table><thead><tr><th>Date</th><th>Guide</th><th>Type</th><th>Guests</th><th>Channel</th><th>Gross</th><th>Profit</th></tr></thead><tbody>';
+  last5.forEach(function(t){
+    var tp=Math.round((t.gross-t.comm-(t.fhFlat||0)-(t.fhProc||0)-t.guidePay-(t.drinks||0)-(t.otherExp||0))*100)/100;
+    rHtml+='<tr><td>'+fmt(t.date)+'</td><td style="font-weight:600;">'+t.guide+'</td><td>'+typeBadge(t.type)+'</td><td>'+getPax(t)+'</td><td>'+badge(t.channel)+'</td>';
+    rHtml+='<td class="mono">$'+t.gross.toFixed(2)+'</td><td class="'+(tp<0?'neg':'pos')+'">$'+tp.toFixed(2)+'</td></tr>';
+  });
+  rHtml+='</tbody></table>';
+  document.getElementById('recent-table').innerHTML=rHtml;
+}
+
+function renderTours() {
+  var usedMonths=[];
+  tours.forEach(function(t){ var m=fmtM(t.date); if(usedMonths.indexOf(m)<0) usedMonths.push(m); });
+  usedMonths.sort(function(a,b){ return a-b; });
+  var mfHtml='<button class="mbtn '+(filterMonth==='all'?'active':'')+'" onclick="setFilter(\'all\')">All</button>';
+  usedMonths.forEach(function(m){ mfHtml+='<button class="mbtn '+(filterMonth==m?'active':'')+'" onclick="setFilter('+m+')">'+FULLMONTHS[m]+'</button>'; });
+  document.getElementById('month-filters').innerHTML=mfHtml;
+  var data=filteredTours().slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+  if(data.length===0){ document.getElementById('tours-table').innerHTML='<div class="empty">No tours found.</div>'; return; }
+  var html='<table><thead><tr><th>Date</th><th>Tour</th><th>Type</th><th>Guide</th><th>Adults</th><th>Kids</th><th>Under 7</th><th>Channel</th><th>Gross</th><th>Comm</th><th>FH proc</th><th>Guide pay</th><th>Drinks</th><th>Other exp</th><th>Profit</th><th>Notes</th><th></th></tr></thead><tbody>';
+  data.forEach(function(t){
+    var product=t.product||'Miami Wow Tour';
+    var pb=product==='Little Havana After Dark'?'<span class="badge b-purple" style="font-size:10px;">LH After Dark</span>':'<span class="badge b-teal" style="font-size:10px;">MWT</span>';
+    var tp=Math.round((t.gross-t.comm-(t.fhFlat||0)-(t.fhProc||0)-t.guidePay-(t.drinks||0)-(t.otherExp||0))*100)/100;
+    html+='<tr><td style="white-space:nowrap;">'+fmt(t.date)+'</td><td>'+pb+'</td><td>'+typeBadge(t.type)+'</td>';
+    html+='<td style="font-weight:600;">'+t.guide+'</td><td>'+t.adults+'</td><td>'+t.children+'</td><td>'+t.infants+'</td>';
+    html+='<td>'+badge(t.channel)+'</td><td class="mono">$'+t.gross.toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--red);">-$'+t.comm.toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--red);">-$'+(t.fhProc||0).toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--red);">-$'+t.guidePay.toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--amber);">'+((t.drinks||0)>0?'-$'+(t.drinks||0).toFixed(2):'&mdash;')+'</td>';
+    html+='<td class="mono" style="color:var(--red);">'+(t.otherExp>0?'-$'+t.otherExp.toFixed(2):'&mdash;')+'</td>';
+    html+='<td class="'+(tp<0?'neg':'pos')+'">$'+tp.toFixed(2)+'</td>';
+    html+='<td style="color:var(--text3);font-size:12px;">'+(t.notes||'&mdash;')+'</td>';
+    html+='<td style="white-space:nowrap;"><button class="btn-secondary btn-sm" onclick="openEditModal('+t.id+')" style="margin-right:4px;">Edit</button><button class="btn-danger" onclick="deleteTour('+t.id+')">Delete</button></td></tr>';
+  });
+  html+='</tbody></table>';
+  document.getElementById('tours-table').innerHTML=html;
+}
+
+function setFilter(m) { filterMonth=m; renderTours(); }
+
+function renderGuides() {
+  var g={};
+  tours.forEach(function(t){
+    if(!g[t.guide]) g[t.guide]={tours:0,guests:0,pay:0,gross:0,net:0,profit:0};
+    g[t.guide].tours++; g[t.guide].guests+=getPax(t); g[t.guide].pay+=t.guidePay;
+    g[t.guide].gross+=t.gross; g[t.guide].net+=(t.gross-t.comm); g[t.guide].profit+=t.profit;
+  });
+  if(Object.keys(g).length===0){ document.getElementById('guides-table').innerHTML='<div class="empty">No tours yet.</div>'; return; }
+  var html='<table><thead><tr><th>Guide</th><th>Tours</th><th>Guests</th><th>Avg pax</th><th>Total pay</th><th>Gross rev</th><th>Net rev</th><th>Profit</th></tr></thead><tbody>';
+  var entries=Object.keys(g).map(function(k){ return [k,g[k]]; });
+  entries.sort(function(a,b){ return b[1].tours-a[1].tours; });
+  entries.forEach(function(e){
+    var name=e[0],v=e[1];
+    html+='<tr><td style="font-weight:600;">'+name+'</td><td>'+v.tours+'</td><td>'+v.guests+'</td>';
+    html+='<td>'+(v.guests/v.tours).toFixed(1)+'</td><td class="mono">$'+v.pay.toFixed(2)+'</td>';
+    html+='<td class="mono">$'+v.gross.toFixed(2)+'</td><td class="mono">$'+v.net.toFixed(2)+'</td>';
+    html+='<td class="'+(v.profit<0?'neg':'pos')+'">$'+v.profit.toFixed(2)+'</td></tr>';
+  });
+  html+='</tbody></table>';
+  document.getElementById('guides-table').innerHTML=html;
+}
+
+function renderPayReport() {
+  var m=document.getElementById('pr-month').value;
+  var sg=document.getElementById('pr-guide').value;
+  var data=tours.filter(function(t){ return (m==='all'||fmtM(t.date)===parseInt(m))&&(sg==='all'||t.guide===sg); }).sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+  var totPay=data.reduce(function(s,t){ return s+t.guidePay; },0);
+  var totDrinks=data.reduce(function(s,t){ return s+(t.drinks||0); },0);
+  var totOther=data.reduce(function(s,t){ return s+(t.otherExp||0); },0);
+  document.getElementById('pr-summary').innerHTML=
+    '<div class="metric"><div class="metric-label">Tours worked</div><div class="metric-value">'+data.length+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Total tour pay</div><div class="metric-value green">$'+totPay.toFixed(2)+'</div></div>'+
+    '<div class="metric"><div class="metric-label">Total reimbursements</div><div class="metric-value amber">$'+(totDrinks+totOther).toFixed(2)+'</div></div>';
+  if(data.length===0){ document.getElementById('pr-content').innerHTML='<div class="card"><div class="empty">No tours found.</div></div>'; return; }
+  var byGuide={};
+  data.forEach(function(t){ if(!byGuide[t.guide]) byGuide[t.guide]=[]; byGuide[t.guide].push(t); });
+  var html='';
+  Object.keys(byGuide).sort().forEach(function(guide){
+    var gt=byGuide[guide];
+    var gPay=gt.reduce(function(s,t){ return s+t.guidePay; },0);
+    var gDrinks=gt.reduce(function(s,t){ return s+(t.drinks||0); },0);
+    var gOther=gt.reduce(function(s,t){ return s+(t.otherExp||0); },0);
+    var gReimb=gDrinks+gOther, gTotal=gPay+gReimb;
+    var period=m==='all'?'Full year 2026':FULLMONTHS[parseInt(m)];
+    html+='<div class="card" style="margin-bottom:1.25rem;">';
+    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:12px;">';
+    html+='<div><div style="font-size:18px;font-weight:600;">'+guide+'</div><div style="font-size:12px;color:var(--text3);">'+gt.length+' tour'+(gt.length!==1?'s':'')+' &bull; '+period+'</div></div>';
+    html+='<div style="display:flex;gap:20px;text-align:right;flex-wrap:wrap;">';
+    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Tour pay</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--teal);">$'+gPay.toFixed(2)+'</div></div>';
+    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Drinks reimb.</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--amber);">$'+gDrinks.toFixed(2)+'</div></div>';
+    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Other reimb.</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--amber);">$'+gOther.toFixed(2)+'</div></div>';
+    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Total owed</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;">$'+gTotal.toFixed(2)+'</div></div>';
+    html+='</div></div>';
+    html+='<div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Channel</th><th>Guests</th><th>Tour pay</th><th>Drinks</th><th>Other reimb.</th><th>Total owed</th><th>Notes</th></tr></thead><tbody>';
+    gt.forEach(function(t){
+      var drinks=t.drinks||0,other=t.otherExp||0,total=t.guidePay+drinks+other;
+      html+='<tr><td style="white-space:nowrap;">'+fmt(t.date)+'</td><td>'+typeBadge(t.type)+'</td><td>'+badge(t.channel)+'</td>';
+      html+='<td>'+getPax(t)+' pax</td><td class="mono pos">$'+t.guidePay.toFixed(2)+'</td>';
+      html+='<td class="mono" style="color:var(--amber);">$'+drinks.toFixed(2)+'</td>';
+      html+='<td class="mono" style="color:'+(other>0?'var(--amber)':'var(--text3)')+';">'+(other>0?'$'+other.toFixed(2):'&mdash;')+'</td>';
+      html+='<td class="mono" style="font-weight:600;">$'+total.toFixed(2)+'</td>';
+      html+='<td style="color:var(--text3);font-size:12px;">'+(t.notes||'&mdash;')+'</td></tr>';
+    });
+    html+='</tbody><tfoot><tr><td colspan="4" style="padding:12px;font-weight:600;">Total</td>';
+    html+='<td class="mono pos" style="padding:12px;font-weight:600;">$'+gPay.toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--amber);padding:12px;font-weight:600;">$'+gDrinks.toFixed(2)+'</td>';
+    html+='<td class="mono" style="color:var(--amber);padding:12px;font-weight:600;">$'+gOther.toFixed(2)+'</td>';
+    html+='<td class="mono" style="font-weight:700;padding:12px;font-size:14px;">$'+gTotal.toFixed(2)+'</td><td></td></tr></tfoot></table></div>';
+    html+='<div style="margin-top:1rem;padding:12px 16px;background:var(--bg);border-radius:var(--rs);border:1px solid var(--border);display:flex;gap:24px;flex-wrap:wrap;">';
+    html+='<div style="font-size:12px;color:var(--text2);"><strong>For 1099:</strong> Tour pay = <span class="mono" style="font-weight:600;color:var(--teal);">$'+gPay.toFixed(2)+'</span></div>';
+    html+='<div style="font-size:12px;color:var(--text2);"><strong>Reimbursements</strong> (not taxable) = <span class="mono" style="font-weight:600;color:var(--amber);">$'+gReimb.toFixed(2)+'</span></div>';
+    html+='</div></div>';
+  });
+  document.getElementById('pr-content').innerHTML=html;
+}
+
+function exportPayCSV() {
+  var m=document.getElementById('pr-month').value, sg=document.getElementById('pr-guide').value;
+  var data=tours.filter(function(t){ return (m==='all'||fmtM(t.date)===parseInt(m))&&(sg==='all'||t.guide===sg); }).sort(function(a,b){ return new Date(a.date)-new Date(b.date); });
+  var rows=[['Guide','Date','Type','Channel','Guests','Tour Pay','Drinks Reimb','Other Reimb','Total Reimb','Total Owed','Notes']];
+  data.forEach(function(t){ var dr=t.drinks||0,oe=t.otherExp||0; rows.push([t.guide,t.date,t.type,ch(t.channel).label,getPax(t),t.guidePay.toFixed(2),dr.toFixed(2),oe.toFixed(2),(dr+oe).toFixed(2),(t.guidePay+dr+oe).toFixed(2),t.notes||'']); });
+  downloadCSV(rows,'MWT_PayReport.csv');
+}
+
+function openPayModal(id) {
+  var t=tours.find(function(t){ return t.id===id; });
+  if(!t) return;
+  modalTourId=id;
+  var vendorNet=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100;
+  document.getElementById('modal-label').textContent=fmt(t.date)+' — '+ch(t.channel).label+' — Gross: $'+t.gross.toFixed(2)+' → Vendor deposit: $'+vendorNet.toFixed(2);
+  document.getElementById('modal-date').value=new Date().toISOString().split('T')[0];
+  document.getElementById('modal-amount').value=vendorNet.toFixed(2);
+  document.getElementById('pay-modal-bg').style.display='flex';
+}
+
+function closeModal() { document.getElementById('pay-modal-bg').style.display='none'; modalTourId=null; }
+
+function savePayment() {
+  if(!modalTourId) return;
+  var date=document.getElementById('modal-date').value;
+  var amount=parseFloat(document.getElementById('modal-amount').value)||0;
+  if(!date){ toast('Please enter a date.',true); return; }
+  var t=tours.find(function(t){ return t.id===modalTourId; });
+  if(t){ t.paidDate=date; t.paidAmount=amount; }
+  saveTours(); if(t) saveTour(t);
+  closeModal(); renderPayments(); renderDashboard();
+  toast('Payment recorded!');
+}
+
+function unmarkPaid(id) {
+  if(!confirm('Remove payment record?')) return;
+  var t=tours.find(function(t){ return t.id===id; });
+  if(t){ delete t.paidDate; delete t.paidAmount; }
+  saveTours(); if(t) saveTour(t);
+  renderPayments(); renderDashboard();
+  toast('Payment removed.');
+}
+
+function logVendorPayment() {
+  var channel=document.getElementById('vp-channel').value;
+  var date=document.getElementById('vp-date').value;
+  var amount=parseFloat(document.getElementById('vp-amount').value)||0;
+  var notes=document.getElementById('vp-notes').value;
+  if(!date){ toast('Please enter a date.',true); return; }
+  if(amount<=0){ toast('Please enter an amount.',true); return; }
+  var p={id:Date.now(),channel:channel,date:date,amount:amount,notes:notes};
+  vendorPayments.push(p); saveVP(); saveVPRecord(p);
+  document.getElementById('vp-amount').value=''; document.getElementById('vp-notes').value='';
+  renderPayments(); renderDashboard();
+  toast('Vendor payment saved!');
+}
+
+function deleteVP(id) {
+  if(!confirm('Delete this vendor payment?')) return;
+  vendorPayments=vendorPayments.filter(function(p){ return p.id!==id; });
+  saveVP(); deleteVPDB(id); renderPayments(); renderDashboard();
+  toast('Deleted.');
+}
+
+function renderPayments() {
+  var m=document.getElementById('pay-mf').value;
+  var tourData=(m==='all'?tours:tours.filter(function(t){ return fmtM(t.date)===parseInt(m); })).sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
+  var paidC=tourData.filter(function(t){ return t.paidDate; }).length;
+  var unpaidC=tourData.filter(function(t){ return !t.paidDate; }).length;
+  document.getElementById('tour-pay-summary').innerHTML='<span style="color:var(--teal);font-weight:600;">'+paidC+' paid</span> &nbsp;&bull;&nbsp; <span style="color:var(--amber);font-weight:600;">'+unpaidC+' pending</span>';
+  var totalGross=tourData.reduce(function(s,t){ return s+t.gross; },0);
+  var totalNet=tourData.reduce(function(s,t){ var net=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100; return s+net; },0);
+  var totalReceived=tourData.filter(function(t){ return t.paidDate; }).reduce(function(s,t){ return s+(t.paidAmount||0); },0);
+  var totalPending=tourData.filter(function(t){ return !t.paidDate; }).reduce(function(s,t){ var net=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100; return s+net; },0);
+  if(tourData.length===0){ document.getElementById('tour-pay-table').innerHTML='<div class="empty">No tours.</div>'; }
+  else {
+    var html='<table><thead><tr><th>Date</th><th>Tour</th><th>Channel</th><th>Gross</th><th>Expected net</th><th>Status</th><th>Paid date</th><th>Received</th><th></th></tr></thead><tbody>';
+    tourData.forEach(function(t){
+      var paid=!!t.paidDate;
+      var netExp=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100;
+      var product=t.product||'Miami Wow Tour';
+      var pb=product==='Little Havana After Dark'?'<span class="badge b-purple" style="font-size:10px;">LH After Dark</span>':'<span class="badge b-teal" style="font-size:10px;">MWT</span>';
+      html+='<tr><td style="white-space:nowrap;font-size:12px;">'+fmt(t.date)+'</td><td>'+pb+'</td><td>'+badge(t.channel)+'</td>';
+      html+='<td class="mono" style="font-size:12px;">$'+t.gross.toFixed(2)+'</td>';
+      html+='<td class="mono pos" style="font-size:12px;font-weight:600;">$'+netExp.toFixed(2)+'</td>';
+      html+='<td>'+(paid?'<span class="badge b-green">Paid</span>':'<span class="badge b-yellow">Pending</span>')+'</td>';
+      html+='<td style="font-size:12px;color:var(--text2);">'+(paid?fmt(t.paidDate):'&mdash;')+'</td>';
+      html+='<td class="mono" style="font-size:12px;color:'+(paid?'var(--teal)':'var(--text3)')+';">'+(paid?'$'+(t.paidAmount||0).toFixed(2):'&mdash;')+'</td>';
+    
