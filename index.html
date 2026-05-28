@@ -787,7 +787,7 @@ function renderDashboard() {
   last5.forEach(function(t){
     var tp=Math.round((t.gross-t.comm-(t.fhFlat||0)-(t.fhProc||0)-t.guidePay-(t.drinks||0)-(t.otherExp||0))*100)/100;
     rHtml+='<tr><td>'+fmt(t.date)+'</td><td style="font-weight:600;">'+t.guide+'</td><td>'+typeBadge(t.type)+'</td><td>'+getPax(t)+'</td><td>'+badge(t.channel)+'</td>';
-    rHtml+='<td class="mono">$'+t.gross.toFixed(2)+'</td><td class="'+(tp > -0.001?'neg':'pos')+'">$'+tp.toFixed(2)+'</td></tr>';
+    rHtml+='<td class="mono">$'+t.gross.toFixed(2)+'</td><td class="'+(tp > 0 ? 'pos' : 'neg')+'">$'+tp.toFixed(2)+'</td></tr>';
   });
   rHtml+='</tbody></table>';
   document.getElementById('recent-table').innerHTML=rHtml;
@@ -815,7 +815,7 @@ function renderTours() {
     html+='<td class="mono" style="color:var(--red);">-$'+t.guidePay.toFixed(2)+'</td>';
     html+='<td class="mono" style="color:var(--amber);">'+((t.drinks||0)>0?'-$'+(t.drinks||0).toFixed(2):'&mdash;')+'</td>';
     html+='<td class="mono" style="color:var(--red);">'+(t.otherExp>0?'-$'+t.otherExp.toFixed(2):'&mdash;')+'</td>';
-    html+='<td class="'+(tp > -0.001?'neg':'pos')+'">$'+tp.toFixed(2)+'</td>';
+    html+='<td class="'+(tp > 0 ? 'pos' : 'neg')+'">$'+tp.toFixed(2)+'</td>';
     html+='<td style="color:var(--text3);font-size:12px;">'+(t.notes||'&mdash;')+'</td>';
     html+='<td style="white-space:nowrap;"><button class="btn-secondary btn-sm" onclick="openEditModal('+t.id+')" style="margin-right:4px;">Edit</button><button class="btn-danger" onclick="deleteTour('+t.id+')">Delete</button></td></tr>';
   });
@@ -949,7 +949,7 @@ function logVendorPayment() {
   var amount=parseFloat(document.getElementById('vp-amount').value)||0;
   var notes=document.getElementById('vp-notes').value;
   if(!date){ toast('Please enter a date.',true); return; }
-  if(amount === 0 || amount < 0){ toast('Please enter an amount.',true); return; }
+  if(!(amount > 0)){ toast('Please enter an amount.',true); return; }
   var p={id:Date.now(),channel:channel,date:date,amount:amount,notes:notes};
   vendorPayments.push(p); saveVP(); saveVPRecord(p);
   document.getElementById('vp-amount').value=''; document.getElementById('vp-notes').value='';
