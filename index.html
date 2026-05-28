@@ -490,7 +490,6 @@ tfoot td{background:var(--bg);font-weight:600;}
 <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
 
 <script>
-//<![CDATA[
 var SB_URL = 'https://djvzoqpgvxcezsxqlvuf.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqdnpvcXBndnhjZXpzeHFsdnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3Nzk3MjYsImV4cCI6MjA5MTM1NTcyNn0._54P3DYTinP4t5yKjUX3tkGsVKEJLjA4APggq_F8VF4';
 var PASSWORD = 'palante2022';
@@ -593,8 +592,8 @@ function calcTourData(adults, children, infants, guide, channel, type, otherExp,
   var fhProc = Math.round(gross * FH_PROC * 100) / 100;
   var guidePay;
   if (type === 'private') { guidePay = 80; }
-  else if (guide === 'Noel') { guidePay = pax < 4 ? 75 : 100; }
-  else { guidePay = pax < 4 ? 60 : 75; }
+  else if (guide === 'Noel') { guidePay = pax \u003C 4 ? 75 : 100; }
+  else { guidePay = pax \u003C 4 ? 60 : 75; }
   var drinks = product === 'Miami Wow Tour' ? Math.round(pax * DRINK * 100) / 100 : 0;
   var exp = parseFloat(otherExp) || 0;
   var profit = Math.round((gross - comm - fhFlat - fhProc - guidePay - drinks - exp) * 100) / 100;
@@ -628,8 +627,8 @@ function calcTour() {
   document.getElementById('c-drinks').textContent = '-$' + d.drinks.toFixed(2) + ' (' + d.pax + ' x $1)';
   document.getElementById('c-exp').textContent = exp > 0 ? '-$' + exp.toFixed(2) : '$0.00';
   var pel = document.getElementById('c-profit');
-  pel.textContent = (d.profit < 0 ? '-$' + Math.abs(d.profit).toFixed(2) : '$' + d.profit.toFixed(2));
-  pel.style.color = d.profit < 0 ? 'var(--red)' : 'var(--teal)';
+  pel.textContent = (d.profit \u003C 0 ? '-$' + Math.abs(d.profit).toFixed(2) : '$' + d.profit.toFixed(2));
+  pel.style.color = d.profit \u003C 0 ? 'var(--red)' : 'var(--teal)';
 }
 
 function logTour() {
@@ -714,8 +713,8 @@ function getPax(t) { return t.pax || t.totalPax || 0; }
 function fmt(d) { var p=d.split('-'); return MONTHS[parseInt(p[1])-1]+' '+parseInt(p[2])+', '+p[0]; }
 function fmtM(d) { return new Date(d+'T00:00:00').getMonth(); }
 function ch(channel) { return CHANNELS[channel] || {label:channel, badge:'b-gray'}; }
-function badge(channel) { return '<span class="badge '+ch(channel).badge+'">'+ch(channel).label+'</span>'; }
-function typeBadge(type) { return type==='private'?'<span class="badge b-dark">Private</span>':'Regular'; }
+function badge(channel) { return '\u003Cspan class="badge '+ch(channel).badge+'">'+ch(channel).label+'\u003C/span>'; }
+function typeBadge(type) { return type==='private'?'\u003Cspan class="badge b-dark">Private\u003C/span>':'Regular'; }
 
 function toast(msg, isErr) {
   var t=document.getElementById('toast');
@@ -725,7 +724,7 @@ function toast(msg, isErr) {
 
 function showView(v) {
   var views=['dashboard','log','tours','guides','payreport','payments','expenses','reconcile'];
-  for(var i=0;i<views.length;i++){
+  for(var i=0;i\u003Cviews.length;i++){
     var el=document.getElementById('view-'+views[i]); if(el) el.classList.remove('active');
     var btn=document.querySelectorAll('.nav-btn')[i]; if(btn) btn.classList.remove('active');
   }
@@ -761,8 +760,8 @@ function renderDashboard() {
   document.getElementById('d-guests').textContent=guests;
   document.getElementById('d-gross').textContent='$'+gross.toFixed(2);
   var pel=document.getElementById('d-profit');
-  pel.textContent=(profit<0?'-$':'$')+Math.abs(profit).toFixed(2);
-  pel.className='metric-value '+(profit<0?'red':'green');
+  pel.textContent=(profit\u003C0?'-$':'$')+Math.abs(profit).toFixed(2);
+  pel.className='metric-value '+(profit\u003C0?'red':'green');
   var paid=data.filter(function(t){ return t.paidDate; });
   var unpaid=data.filter(function(t){ return !t.paidDate; });
   var received=paid.reduce(function(s,t){ return s+(t.paidAmount||0); },0);
@@ -777,50 +776,50 @@ function renderDashboard() {
   var cgHtml='';
   Object.keys(CHANNELS).forEach(function(c){
     var v=chs[c];
-    cgHtml+='<div class="ch-card"><div class="ch-name">'+CHANNELS[c].label+'</div>';
-    cgHtml+='<div class="ch-val">'+(v?'$'+v.net.toFixed(2):'&mdash;')+'</div>';
-    cgHtml+='<div class="ch-count">'+(v?v.count+' tour'+(v.count!==1?'s':''):'No tours')+'</div></div>';
+    cgHtml+='\u003Cdiv class="ch-card">\u003Cdiv class="ch-name">'+CHANNELS[c].label+'\u003C/div>';
+    cgHtml+='\u003Cdiv class="ch-val">'+(v?'$'+v.net.toFixed(2):'&mdash;')+'\u003C/div>';
+    cgHtml+='\u003Cdiv class="ch-count">'+(v?v.count+' tour'+(v.count!==1?'s':''):'No tours')+'\u003C/div>\u003C/div>';
   });
   document.getElementById('channel-grid').innerHTML=cgHtml;
   var last5=data.slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); }).slice(0,5);
-  if(last5.length===0){ document.getElementById('recent-table').innerHTML='<div class="empty">No tours yet.</div>'; return; }
-  var rHtml='<table><thead><tr><th>Date</th><th>Guide</th><th>Type</th><th>Guests</th><th>Channel</th><th>Gross</th><th>Profit</th></tr></thead><tbody>';
+  if(last5.length===0){ document.getElementById('recent-table').innerHTML='\u003Cdiv class="empty">No tours yet.\u003C/div>'; return; }
+  var rHtml='\u003Ctable>\u003Cthead>\u003Ctr>\u003Cth>Date\u003C/th>\u003Cth>Guide\u003C/th>\u003Cth>Type\u003C/th>\u003Cth>Guests\u003C/th>\u003Cth>Channel\u003C/th>\u003Cth>Gross\u003C/th>\u003Cth>Profit\u003C/th>\u003C/tr>\u003C/thead>\u003Ctbody>';
   last5.forEach(function(t){
     var tp=Math.round((t.gross-t.comm-(t.fhFlat||0)-(t.fhProc||0)-t.guidePay-(t.drinks||0)-(t.otherExp||0))*100)/100;
-    rHtml+='<tr><td>'+fmt(t.date)+'</td><td style="font-weight:600;">'+t.guide+'</td><td>'+typeBadge(t.type)+'</td><td>'+getPax(t)+'</td><td>'+badge(t.channel)+'</td>';
-    rHtml+='<td class="mono">$'+t.gross.toFixed(2)+'</td><td class="'+(tp<0?'neg':'pos')+'">$'+tp.toFixed(2)+'</td></tr>';
+    rHtml+='\u003Ctr>\u003Ctd>'+fmt(t.date)+'\u003C/td>\u003Ctd style="font-weight:600;">'+t.guide+'\u003C/td>\u003Ctd>'+typeBadge(t.type)+'\u003C/td>\u003Ctd>'+getPax(t)+'\u003C/td>\u003Ctd>'+badge(t.channel)+'\u003C/td>';
+    rHtml+='\u003Ctd class="mono">$'+t.gross.toFixed(2)+'\u003C/td>\u003Ctd class="'+(tp\u003C0?'neg':'pos')+'">$'+tp.toFixed(2)+'\u003C/td>\u003C/tr>';
   });
-  rHtml+='</tbody></table>';
+  rHtml+='\u003C/tbody>\u003C/table>';
   document.getElementById('recent-table').innerHTML=rHtml;
 }
 
 function renderTours() {
   var usedMonths=[];
-  tours.forEach(function(t){ var m=fmtM(t.date); if(usedMonths.indexOf(m)<0) usedMonths.push(m); });
+  tours.forEach(function(t){ var m=fmtM(t.date); if(usedMonths.indexOf(m)\u003C0) usedMonths.push(m); });
   usedMonths.sort(function(a,b){ return a-b; });
-  var mfHtml='<button class="mbtn '+(filterMonth==='all'?'active':'')+'" onclick="setFilter(\'all\')">All</button>';
-  usedMonths.forEach(function(m){ mfHtml+='<button class="mbtn '+(filterMonth==m?'active':'')+'" onclick="setFilter('+m+')">'+FULLMONTHS[m]+'</button>'; });
+  var mfHtml='\u003Cbutton class="mbtn '+(filterMonth==='all'?'active':'')+'" onclick="setFilter(\'all\')">All\u003C/button>';
+  usedMonths.forEach(function(m){ mfHtml+='\u003Cbutton class="mbtn '+(filterMonth==m?'active':'')+'" onclick="setFilter('+m+')">'+FULLMONTHS[m]+'\u003C/button>'; });
   document.getElementById('month-filters').innerHTML=mfHtml;
   var data=filteredTours().slice().sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
-  if(data.length===0){ document.getElementById('tours-table').innerHTML='<div class="empty">No tours found.</div>'; return; }
-  var html='<table><thead><tr><th>Date</th><th>Tour</th><th>Type</th><th>Guide</th><th>Adults</th><th>Kids</th><th>Under 7</th><th>Channel</th><th>Gross</th><th>Comm</th><th>FH proc</th><th>Guide pay</th><th>Drinks</th><th>Other exp</th><th>Profit</th><th>Notes</th><th></th></tr></thead><tbody>';
+  if(data.length===0){ document.getElementById('tours-table').innerHTML='\u003Cdiv class="empty">No tours found.\u003C/div>'; return; }
+  var html='\u003Ctable>\u003Cthead>\u003Ctr>\u003Cth>Date\u003C/th>\u003Cth>Tour\u003C/th>\u003Cth>Type\u003C/th>\u003Cth>Guide\u003C/th>\u003Cth>Adults\u003C/th>\u003Cth>Kids\u003C/th>\u003Cth>Under 7\u003C/th>\u003Cth>Channel\u003C/th>\u003Cth>Gross\u003C/th>\u003Cth>Comm\u003C/th>\u003Cth>FH proc\u003C/th>\u003Cth>Guide pay\u003C/th>\u003Cth>Drinks\u003C/th>\u003Cth>Other exp\u003C/th>\u003Cth>Profit\u003C/th>\u003Cth>Notes\u003C/th>\u003Cth>\u003C/th>\u003C/tr>\u003C/thead>\u003Ctbody>';
   data.forEach(function(t){
     var product=t.product||'Miami Wow Tour';
-    var pb=product==='Little Havana After Dark'?'<span class="badge b-purple" style="font-size:10px;">LH After Dark</span>':'<span class="badge b-teal" style="font-size:10px;">MWT</span>';
+    var pb=product==='Little Havana After Dark'?'\u003Cspan class="badge b-purple" style="font-size:10px;">LH After Dark\u003C/span>':'\u003Cspan class="badge b-teal" style="font-size:10px;">MWT\u003C/span>';
     var tp=Math.round((t.gross-t.comm-(t.fhFlat||0)-(t.fhProc||0)-t.guidePay-(t.drinks||0)-(t.otherExp||0))*100)/100;
-    html+='<tr><td style="white-space:nowrap;">'+fmt(t.date)+'</td><td>'+pb+'</td><td>'+typeBadge(t.type)+'</td>';
-    html+='<td style="font-weight:600;">'+t.guide+'</td><td>'+t.adults+'</td><td>'+t.children+'</td><td>'+t.infants+'</td>';
-    html+='<td>'+badge(t.channel)+'</td><td class="mono">$'+t.gross.toFixed(2)+'</td>';
-    html+='<td class="mono" style="color:var(--red);">-$'+t.comm.toFixed(2)+'</td>';
-    html+='<td class="mono" style="color:var(--red);">-$'+(t.fhProc||0).toFixed(2)+'</td>';
-    html+='<td class="mono" style="color:var(--red);">-$'+t.guidePay.toFixed(2)+'</td>';
-    html+='<td class="mono" style="color:var(--amber);">'+((t.drinks||0)>0?'-$'+(t.drinks||0).toFixed(2):'&mdash;')+'</td>';
-    html+='<td class="mono" style="color:var(--red);">'+(t.otherExp>0?'-$'+t.otherExp.toFixed(2):'&mdash;')+'</td>';
-    html+='<td class="'+(tp<0?'neg':'pos')+'">$'+tp.toFixed(2)+'</td>';
-    html+='<td style="color:var(--text3);font-size:12px;">'+(t.notes||'&mdash;')+'</td>';
-    html+='<td style="white-space:nowrap;"><button class="btn-secondary btn-sm" onclick="openEditModal('+t.id+')" style="margin-right:4px;">Edit</button><button class="btn-danger" onclick="deleteTour('+t.id+')">Delete</button></td></tr>';
+    html+='\u003Ctr>\u003Ctd style="white-space:nowrap;">'+fmt(t.date)+'\u003C/td>\u003Ctd>'+pb+'\u003C/td>\u003Ctd>'+typeBadge(t.type)+'\u003C/td>';
+    html+='\u003Ctd style="font-weight:600;">'+t.guide+'\u003C/td>\u003Ctd>'+t.adults+'\u003C/td>\u003Ctd>'+t.children+'\u003C/td>\u003Ctd>'+t.infants+'\u003C/td>';
+    html+='\u003Ctd>'+badge(t.channel)+'\u003C/td>\u003Ctd class="mono">$'+t.gross.toFixed(2)+'\u003C/td>';
+    html+='\u003Ctd class="mono" style="color:var(--red);">-$'+t.comm.toFixed(2)+'\u003C/td>';
+    html+='\u003Ctd class="mono" style="color:var(--red);">-$'+(t.fhProc||0).toFixed(2)+'\u003C/td>';
+    html+='\u003Ctd class="mono" style="color:var(--red);">-$'+t.guidePay.toFixed(2)+'\u003C/td>';
+    html+='\u003Ctd class="mono" style="color:var(--amber);">'+((t.drinks||0)>0?'-$'+(t.drinks||0).toFixed(2):'&mdash;')+'\u003C/td>';
+    html+='\u003Ctd class="mono" style="color:var(--red);">'+(t.otherExp>0?'-$'+t.otherExp.toFixed(2):'&mdash;')+'\u003C/td>';
+    html+='\u003Ctd class="'+(tp\u003C0?'neg':'pos')+'">$'+tp.toFixed(2)+'\u003C/td>';
+    html+='\u003Ctd style="color:var(--text3);font-size:12px;">'+(t.notes||'&mdash;')+'\u003C/td>';
+    html+='\u003Ctd style="white-space:nowrap;">\u003Cbutton class="btn-secondary btn-sm" onclick="openEditModal('+t.id+')" style="margin-right:4px;">Edit\u003C/button>\u003Cbutton class="btn-danger" onclick="deleteTour('+t.id+')">Delete\u003C/button>\u003C/td>\u003C/tr>';
   });
-  html+='</tbody></table>';
+  html+='\u003C/tbody>\u003C/table>';
   document.getElementById('tours-table').innerHTML=html;
 }
 
@@ -833,18 +832,18 @@ function renderGuides() {
     g[t.guide].tours++; g[t.guide].guests+=getPax(t); g[t.guide].pay+=t.guidePay;
     g[t.guide].gross+=t.gross; g[t.guide].net+=(t.gross-t.comm); g[t.guide].profit+=t.profit;
   });
-  if(Object.keys(g).length===0){ document.getElementById('guides-table').innerHTML='<div class="empty">No tours yet.</div>'; return; }
-  var html='<table><thead><tr><th>Guide</th><th>Tours</th><th>Guests</th><th>Avg pax</th><th>Total pay</th><th>Gross rev</th><th>Net rev</th><th>Profit</th></tr></thead><tbody>';
+  if(Object.keys(g).length===0){ document.getElementById('guides-table').innerHTML='\u003Cdiv class="empty">No tours yet.\u003C/div>'; return; }
+  var html='\u003Ctable>\u003Cthead>\u003Ctr>\u003Cth>Guide\u003C/th>\u003Cth>Tours\u003C/th>\u003Cth>Guests\u003C/th>\u003Cth>Avg pax\u003C/th>\u003Cth>Total pay\u003C/th>\u003Cth>Gross rev\u003C/th>\u003Cth>Net rev\u003C/th>\u003Cth>Profit\u003C/th>\u003C/tr>\u003C/thead>\u003Ctbody>';
   var entries=Object.keys(g).map(function(k){ return [k,g[k]]; });
   entries.sort(function(a,b){ return b[1].tours-a[1].tours; });
   entries.forEach(function(e){
     var name=e[0],v=e[1];
-    html+='<tr><td style="font-weight:600;">'+name+'</td><td>'+v.tours+'</td><td>'+v.guests+'</td>';
-    html+='<td>'+(v.guests/v.tours).toFixed(1)+'</td><td class="mono">$'+v.pay.toFixed(2)+'</td>';
-    html+='<td class="mono">$'+v.gross.toFixed(2)+'</td><td class="mono">$'+v.net.toFixed(2)+'</td>';
-    html+='<td class="'+(v.profit<0?'neg':'pos')+'">$'+v.profit.toFixed(2)+'</td></tr>';
+    html+='\u003Ctr>\u003Ctd style="font-weight:600;">'+name+'\u003C/td>\u003Ctd>'+v.tours+'\u003C/td>\u003Ctd>'+v.guests+'\u003C/td>';
+    html+='\u003Ctd>'+(v.guests/v.tours).toFixed(1)+'\u003C/td>\u003Ctd class="mono">$'+v.pay.toFixed(2)+'\u003C/td>';
+    html+='\u003Ctd class="mono">$'+v.gross.toFixed(2)+'\u003C/td>\u003Ctd class="mono">$'+v.net.toFixed(2)+'\u003C/td>';
+    html+='\u003Ctd class="'+(v.profit\u003C0?'neg':'pos')+'">$'+v.profit.toFixed(2)+'\u003C/td>\u003C/tr>';
   });
-  html+='</tbody></table>';
+  html+='\u003C/tbody>\u003C/table>';
   document.getElementById('guides-table').innerHTML=html;
 }
 
@@ -856,10 +855,10 @@ function renderPayReport() {
   var totDrinks=data.reduce(function(s,t){ return s+(t.drinks||0); },0);
   var totOther=data.reduce(function(s,t){ return s+(t.otherExp||0); },0);
   document.getElementById('pr-summary').innerHTML=
-    '<div class="metric"><div class="metric-label">Tours worked</div><div class="metric-value">'+data.length+'</div></div>'+
-    '<div class="metric"><div class="metric-label">Total tour pay</div><div class="metric-value green">$'+totPay.toFixed(2)+'</div></div>'+
-    '<div class="metric"><div class="metric-label">Total reimbursements</div><div class="metric-value amber">$'+(totDrinks+totOther).toFixed(2)+'</div></div>';
-  if(data.length===0){ document.getElementById('pr-content').innerHTML='<div class="card"><div class="empty">No tours found.</div></div>'; return; }
+    '\u003Cdiv class="metric">\u003Cdiv class="metric-label">Tours worked\u003C/div>\u003Cdiv class="metric-value">'+data.length+'\u003C/div>\u003C/div>'+
+    '\u003Cdiv class="metric">\u003Cdiv class="metric-label">Total tour pay\u003C/div>\u003Cdiv class="metric-value green">$'+totPay.toFixed(2)+'\u003C/div>\u003C/div>'+
+    '\u003Cdiv class="metric">\u003Cdiv class="metric-label">Total reimbursements\u003C/div>\u003Cdiv class="metric-value amber">$'+(totDrinks+totOther).toFixed(2)+'\u003C/div>\u003C/div>';
+  if(data.length===0){ document.getElementById('pr-content').innerHTML='\u003Cdiv class="card">\u003Cdiv class="empty">No tours found.\u003C/div>\u003C/div>'; return; }
   var byGuide={};
   data.forEach(function(t){ if(!byGuide[t.guide]) byGuide[t.guide]=[]; byGuide[t.guide].push(t); });
   var html='';
@@ -870,34 +869,34 @@ function renderPayReport() {
     var gOther=gt.reduce(function(s,t){ return s+(t.otherExp||0); },0);
     var gReimb=gDrinks+gOther, gTotal=gPay+gReimb;
     var period=m==='all'?'Full year 2026':FULLMONTHS[parseInt(m)];
-    html+='<div class="card" style="margin-bottom:1.25rem;">';
-    html+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:12px;">';
-    html+='<div><div style="font-size:18px;font-weight:600;">'+guide+'</div><div style="font-size:12px;color:var(--text3);">'+gt.length+' tour'+(gt.length!==1?'s':'')+' &bull; '+period+'</div></div>';
-    html+='<div style="display:flex;gap:20px;text-align:right;flex-wrap:wrap;">';
-    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Tour pay</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--teal);">$'+gPay.toFixed(2)+'</div></div>';
-    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Drinks reimb.</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--amber);">$'+gDrinks.toFixed(2)+'</div></div>';
-    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Other reimb.</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--amber);">$'+gOther.toFixed(2)+'</div></div>';
-    html+='<div><div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Total owed</div><div style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;">$'+gTotal.toFixed(2)+'</div></div>';
-    html+='</div></div>';
-    html+='<div class="table-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Channel</th><th>Guests</th><th>Tour pay</th><th>Drinks</th><th>Other reimb.</th><th>Total owed</th><th>Notes</th></tr></thead><tbody>';
+    html+='\u003Cdiv class="card" style="margin-bottom:1.25rem;">';
+    html+='\u003Cdiv style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;flex-wrap:wrap;gap:12px;">';
+    html+='\u003Cdiv>\u003Cdiv style="font-size:18px;font-weight:600;">'+guide+'\u003C/div>\u003Cdiv style="font-size:12px;color:var(--text3);">'+gt.length+' tour'+(gt.length!==1?'s':'')+' &bull; '+period+'\u003C/div>\u003C/div>';
+    html+='\u003Cdiv style="display:flex;gap:20px;text-align:right;flex-wrap:wrap;">';
+    html+='\u003Cdiv>\u003Cdiv style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Tour pay\u003C/div>\u003Cdiv style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--teal);">$'+gPay.toFixed(2)+'\u003C/div>\u003C/div>';
+    html+='\u003Cdiv>\u003Cdiv style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Drinks reimb.\u003C/div>\u003Cdiv style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--amber);">$'+gDrinks.toFixed(2)+'\u003C/div>\u003C/div>';
+    html+='\u003Cdiv>\u003Cdiv style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Other reimb.\u003C/div>\u003Cdiv style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;color:var(--amber);">$'+gOther.toFixed(2)+'\u003C/div>\u003C/div>';
+    html+='\u003Cdiv>\u003Cdiv style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);">Total owed\u003C/div>\u003Cdiv style="font-size:18px;font-weight:600;font-family:\'DM Mono\',monospace;">$'+gTotal.toFixed(2)+'\u003C/div>\u003C/div>';
+    html+='\u003C/div>\u003C/div>';
+    html+='\u003Cdiv class="table-wrap">\u003Ctable>\u003Cthead>\u003Ctr>\u003Cth>Date\u003C/th>\u003Cth>Type\u003C/th>\u003Cth>Channel\u003C/th>\u003Cth>Guests\u003C/th>\u003Cth>Tour pay\u003C/th>\u003Cth>Drinks\u003C/th>\u003Cth>Other reimb.\u003C/th>\u003Cth>Total owed\u003C/th>\u003Cth>Notes\u003C/th>\u003C/tr>\u003C/thead>\u003Ctbody>';
     gt.forEach(function(t){
       var drinks=t.drinks||0,other=t.otherExp||0,total=t.guidePay+drinks+other;
-      html+='<tr><td style="white-space:nowrap;">'+fmt(t.date)+'</td><td>'+typeBadge(t.type)+'</td><td>'+badge(t.channel)+'</td>';
-      html+='<td>'+getPax(t)+' pax</td><td class="mono pos">$'+t.guidePay.toFixed(2)+'</td>';
-      html+='<td class="mono" style="color:var(--amber);">$'+drinks.toFixed(2)+'</td>';
-      html+='<td class="mono" style="color:'+(other>0?'var(--amber)':'var(--text3)')+';">'+(other>0?'$'+other.toFixed(2):'&mdash;')+'</td>';
-      html+='<td class="mono" style="font-weight:600;">$'+total.toFixed(2)+'</td>';
-      html+='<td style="color:var(--text3);font-size:12px;">'+(t.notes||'&mdash;')+'</td></tr>';
+      html+='\u003Ctr>\u003Ctd style="white-space:nowrap;">'+fmt(t.date)+'\u003C/td>\u003Ctd>'+typeBadge(t.type)+'\u003C/td>\u003Ctd>'+badge(t.channel)+'\u003C/td>';
+      html+='\u003Ctd>'+getPax(t)+' pax\u003C/td>\u003Ctd class="mono pos">$'+t.guidePay.toFixed(2)+'\u003C/td>';
+      html+='\u003Ctd class="mono" style="color:var(--amber);">$'+drinks.toFixed(2)+'\u003C/td>';
+      html+='\u003Ctd class="mono" style="color:'+(other>0?'var(--amber)':'var(--text3)')+';">'+(other>0?'$'+other.toFixed(2):'&mdash;')+'\u003C/td>';
+      html+='\u003Ctd class="mono" style="font-weight:600;">$'+total.toFixed(2)+'\u003C/td>';
+      html+='\u003Ctd style="color:var(--text3);font-size:12px;">'+(t.notes||'&mdash;')+'\u003C/td>\u003C/tr>';
     });
-    html+='</tbody><tfoot><tr><td colspan="4" style="padding:12px;font-weight:600;">Total</td>';
-    html+='<td class="mono pos" style="padding:12px;font-weight:600;">$'+gPay.toFixed(2)+'</td>';
-    html+='<td class="mono" style="color:var(--amber);padding:12px;font-weight:600;">$'+gDrinks.toFixed(2)+'</td>';
-    html+='<td class="mono" style="color:var(--amber);padding:12px;font-weight:600;">$'+gOther.toFixed(2)+'</td>';
-    html+='<td class="mono" style="font-weight:700;padding:12px;font-size:14px;">$'+gTotal.toFixed(2)+'</td><td></td></tr></tfoot></table></div>';
-    html+='<div style="margin-top:1rem;padding:12px 16px;background:var(--bg);border-radius:var(--rs);border:1px solid var(--border);display:flex;gap:24px;flex-wrap:wrap;">';
-    html+='<div style="font-size:12px;color:var(--text2);"><strong>For 1099:</strong> Tour pay = <span class="mono" style="font-weight:600;color:var(--teal);">$'+gPay.toFixed(2)+'</span></div>';
-    html+='<div style="font-size:12px;color:var(--text2);"><strong>Reimbursements</strong> (not taxable) = <span class="mono" style="font-weight:600;color:var(--amber);">$'+gReimb.toFixed(2)+'</span></div>';
-    html+='</div></div>';
+    html+='\u003C/tbody>\u003Ctfoot>\u003Ctr>\u003Ctd colspan="4" style="padding:12px;font-weight:600;">Total\u003C/td>';
+    html+='\u003Ctd class="mono pos" style="padding:12px;font-weight:600;">$'+gPay.toFixed(2)+'\u003C/td>';
+    html+='\u003Ctd class="mono" style="color:var(--amber);padding:12px;font-weight:600;">$'+gDrinks.toFixed(2)+'\u003C/td>';
+    html+='\u003Ctd class="mono" style="color:var(--amber);padding:12px;font-weight:600;">$'+gOther.toFixed(2)+'\u003C/td>';
+    html+='\u003Ctd class="mono" style="font-weight:700;padding:12px;font-size:14px;">$'+gTotal.toFixed(2)+'\u003C/td>\u003Ctd>\u003C/td>\u003C/tr>\u003C/tfoot>\u003C/table>\u003C/div>';
+    html+='\u003Cdiv style="margin-top:1rem;padding:12px 16px;background:var(--bg);border-radius:var(--rs);border:1px solid var(--border);display:flex;gap:24px;flex-wrap:wrap;">';
+    html+='\u003Cdiv style="font-size:12px;color:var(--text2);">\u003Cstrong>For 1099:\u003C/strong> Tour pay = \u003Cspan class="mono" style="font-weight:600;color:var(--teal);">$'+gPay.toFixed(2)+'\u003C/span>\u003C/div>';
+    html+='\u003Cdiv style="font-size:12px;color:var(--text2);">\u003Cstrong>Reimbursements\u003C/strong> (not taxable) = \u003Cspan class="mono" style="font-weight:600;color:var(--amber);">$'+gReimb.toFixed(2)+'\u003C/span>\u003C/div>';
+    html+='\u003C/div>\u003C/div>';
   });
   document.getElementById('pr-content').innerHTML=html;
 }
@@ -950,7 +949,7 @@ function logVendorPayment() {
   var amount=parseFloat(document.getElementById('vp-amount').value)||0;
   var notes=document.getElementById('vp-notes').value;
   if(!date){ toast('Please enter a date.',true); return; }
-  if(amount<=0){ toast('Please enter an amount.',true); return; }
+  if(amount\u003C=0){ toast('Please enter an amount.',true); return; }
   var p={id:Date.now(),channel:channel,date:date,amount:amount,notes:notes};
   vendorPayments.push(p); saveVP(); saveVPRecord(p);
   document.getElementById('vp-amount').value=''; document.getElementById('vp-notes').value='';
@@ -970,27 +969,26 @@ function renderPayments() {
   var tourData=(m==='all'?tours:tours.filter(function(t){ return fmtM(t.date)===parseInt(m); })).sort(function(a,b){ return new Date(b.date)-new Date(a.date); });
   var paidC=tourData.filter(function(t){ return t.paidDate; }).length;
   var unpaidC=tourData.filter(function(t){ return !t.paidDate; }).length;
-  document.getElementById('tour-pay-summary').innerHTML='<span style="color:var(--teal);font-weight:600;">'+paidC+' paid</span> &nbsp;&bull;&nbsp; <span style="color:var(--amber);font-weight:600;">'+unpaidC+' pending</span>';
+  document.getElementById('tour-pay-summary').innerHTML='\u003Cspan style="color:var(--teal);font-weight:600;">'+paidC+' paid\u003C/span> &nbsp;&bull;&nbsp; \u003Cspan style="color:var(--amber);font-weight:600;">'+unpaidC+' pending\u003C/span>';
   var totalGross=tourData.reduce(function(s,t){ return s+t.gross; },0);
   var totalNet=tourData.reduce(function(s,t){ var net=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100; return s+net; },0);
   var totalReceived=tourData.filter(function(t){ return t.paidDate; }).reduce(function(s,t){ return s+(t.paidAmount||0); },0);
   var totalPending=tourData.filter(function(t){ return !t.paidDate; }).reduce(function(s,t){ var net=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100; return s+net; },0);
-  if(tourData.length===0){ document.getElementById('tour-pay-table').innerHTML='<div class="empty">No tours.</div>'; }
+  if(tourData.length===0){ document.getElementById('tour-pay-table').innerHTML='\u003Cdiv class="empty">No tours.\u003C/div>'; }
   else {
-    var html='<table><thead><tr><th>Date</th><th>Tour</th><th>Channel</th><th>Gross</th><th>Expected net</th><th>Status</th><th>Paid date</th><th>Received</th><th></th></tr></thead><tbody>';
+    var html='\u003Ctable>\u003Cthead>\u003Ctr>\u003Cth>Date\u003C/th>\u003Cth>Tour\u003C/th>\u003Cth>Channel\u003C/th>\u003Cth>Gross\u003C/th>\u003Cth>Expected net\u003C/th>\u003Cth>Status\u003C/th>\u003Cth>Paid date\u003C/th>\u003Cth>Received\u003C/th>\u003Cth>\u003C/th>\u003C/tr>\u003C/thead>\u003Ctbody>';
     tourData.forEach(function(t){
       var paid=!!t.paidDate;
       var netExp=(t.vendorNet&&t.vendorNet>0)?t.vendorNet:Math.round((t.gross-t.comm-(t.fhFlat||0))*100)/100;
       var product=t.product||'Miami Wow Tour';
-      var pb=product==='Little Havana After Dark'?'<span class="badge b-purple" style="font-size:10px;">LH After Dark</span>':'<span class="badge b-teal" style="font-size:10px;">MWT</span>';
-      html+='<tr><td style="white-space:nowrap;font-size:12px;">'+fmt(t.date)+'</td><td>'+pb+'</td><td>'+badge(t.channel)+'</td>';
-      html+='<td class="mono" style="font-size:12px;">$'+t.gross.toFixed(2)+'</td>';
-      html+='<td class="mono pos" style="font-size:12px;font-weight:600;">$'+netExp.toFixed(2)+'</td>';
-      html+='<td>'+(paid?'<span class="badge b-green">Paid</span>':'<span class="badge b-yellow">Pending</span>')+'</td>';
-      html+='<td style="font-size:12px;color:var(--text2);">'+(paid?fmt(t.paidDate):'&mdash;')+'</td>';
-      html+='<td class="mono" style="font-size:12px;color:'+(paid?'var(--teal)':'var(--text3)')+';">'+(paid?'$'+(t.paidAmount||0).toFixed(2):'&mdash;')+'</td>';
-   //]]>
-</script>E html>
+      var pb=product==='Little Havana After Dark'?'\u003Cspan class="badge b-purple" style="font-size:10px;">LH After Dark\u003C/span>':'\u003Cspan class="badge b-teal" style="font-size:10px;">MWT\u003C/span>';
+      html+='\u003Ctr>\u003Ctd style="white-space:nowrap;font-size:12px;">'+fmt(t.date)+'\u003C/td>\u003Ctd>'+pb+'\u003C/td>\u003Ctd>'+badge(t.channel)+'\u003C/td>';
+      html+='\u003Ctd class="mono" style="font-size:12px;">$'+t.gross.toFixed(2)+'\u003C/td>';
+      html+='\u003Ctd class="mono pos" style="font-size:12px;font-weight:600;">$'+netExp.toFixed(2)+'\u003C/td>';
+      html+='\u003Ctd>'+(paid?'\u003Cspan class="badge b-green">Paid\u003C/span>':'\u003Cspan class="badge b-yellow">Pending\u003C/span>')+'\u003C/td>';
+      html+='\u003Ctd style="font-size:12px;color:var(--text2);">'+(paid?fmt(t.paidDate):'&mdash;')+'\u003C/td>';
+      html+='\u003Ctd class="mono" style="font-size:12px;color:'+(paid?'var(--teal)':'var(--text3)')+';">'+(paid?'$'+(t.paidAmount||0).toFixed(2):'&mdash;')+'\u003C/td>';
+   </script>E html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1482,7 +1480,6 @@ tfoot td{background:var(--bg);font-weight:600;}
 <style>@keyframes spin{to{transform:rotate(360deg);}}</style>
 
 <script>
-//<![CDATA[
 var SB_URL = 'https://djvzoqpgvxcezsxqlvuf.supabase.co';
 var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRqdnpvcXBndnhjZXpzeHFsdnVmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU3Nzk3MjYsImV4cCI6MjA5MTM1NTcyNn0._54P3DYTinP4t5yKjUX3tkGsVKEJLjA4APggq_F8VF4';
 var PASSWORD = 'palante2022';
@@ -1981,4 +1978,3 @@ function renderPayments() {
       html+='<td>'+(paid?'<span class="badge b-green">Paid</span>':'<span class="badge b-yellow">Pending</span>')+'</td>';
       html+='<td style="font-size:12px;color:var(--text2);">'+(paid?fmt(t.paidDate):'&mdash;')+'</td>';
       html+='<td class="mono" style="font-size:12px;color:'+(paid?'var(--teal)':'var(--text3)')+';">'+(paid?'$'+(t.paidAmount||0).toFixed(2):'&mdash;')+'</td>';
-    
