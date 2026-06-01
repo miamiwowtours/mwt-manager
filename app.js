@@ -268,14 +268,15 @@ function renderDashboard() {
 function renderAttendanceChart() {
   var canvas = document.getElementById('attendance-chart');
   if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-
-  // Match canvas pixel size to its CSS display size
-  var rect = canvas.getBoundingClientRect();
-  var W = Math.floor(rect.width) || 800;
-  var H = 200;
-  canvas.width = W;
+  // Use the parent container width for reliable sizing
+  var parent = canvas.parentElement;
+  var W = (parent ? parent.clientWidth - 40 : 0) || 600;
+  var H = 220;
+  canvas.width  = W;
   canvas.height = H;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+  var ctx = canvas.getContext('2d');
 
   var monthPax   = new Array(12).fill(0);
   var monthTours = new Array(12).fill(0);
@@ -284,101 +285,73 @@ function renderAttendanceChart() {
     monthPax[mo]   += getPax(t);
     monthTours[mo] += 1;
   });
-
   var maxPax = Math.max.apply(null, monthPax) || 1;
 
-  // Padding: left for Y-axis labels, bottom for month names
-  var padL = 42, padR = 8, padT = 20, padB = 22;
+  var padL = 44, padR = 12, padT = 18, padB = 24;
   var chartW = W - padL - padR;
   var chartH = H - padT - padB;
   var gap  = Math.floor(chartW / 12);
-  var barW = Math.max(6, Math.floor(gap * 0.55));
+  var barW = Math.max(8, Math.floor(gap * 0.6));
 
   ctx.clearRect(0, 0, W, H);
 
-  var gridColor  = 'rgba(255,255,255,0.08)';
+  // Y-axis grid lines + guest count labels on left
   var labelColor = 'rgba(255,255,255,0.55)';
-  var barColor   = '#4dd9a8';
-  var barActive  = '#7ee8c8';
-  var zeroColor  = 'rgba(255,255,255,0.10)';
-  var axisColor  = 'rgba(255,255,255,0.20)';
-
-  // Y-axis: 5 grid lines with guest count labels
+  var gridColor  = 'rgba(255,255,255,0.08)';
   ctx.font = '10px DM Sans,system-ui,sans-serif';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'middle';
   for (var gi = 0; gi <= 4; gi++) {
     var yVal = Math.round(maxPax * gi / 4);
     var yPos = padT + chartH - Math.round(chartH * gi / 4);
-    // Grid line
-    ctx.strokeStyle = gi === 0 ? axisColor : gridColor;
-    ctx.lineWidth = gi === 0 ? 1 : 0.5;
+    ctx.strokeStyle = gi === 0 ? 'rgba(255,255,255,0.15)' : gridColor;
+    ctx.lineWidth = 0.75;
     ctx.beginPath();
     ctx.moveTo(padL, yPos);
     ctx.lineTo(W - padR, yPos);
     ctx.stroke();
-    // Y label (skip 0)
-    if (gi > 0) {
-      ctx.fillStyle = labelColor;
-      ctx.fillText(yVal, padL - 5, yPos);
-    }
+    if (gi > 0) { ctx.fillStyle = labelColor; ctx.fillText(yVal, padL - 6, yPos); }
   }
 
   var currentMonth = new Date().getMonth();
+  var barColor  = '#4dd9a8';
+  var barActive = '#7ee8c8';
+  var zeroColor = 'rgba(255,255,255,0.10)';
 
-  // Draw bars + month labels
-  ctx.textBaseline = 'top';
   for (var mi = 0; mi < 12; mi++) {
     var bx = padL + mi * gap + Math.floor((gap - barW) / 2);
-    var barH_px, fillColor;
-
+    var barH_px, fc;
     if (monthPax[mi] === 0) {
-      barH_px = 2;
-      fillColor = zeroColor;
+      barH_px = 2; fc = zeroColor;
     } else {
       barH_px = Math.max(4, Math.round(chartH * monthPax[mi] / maxPax));
-      fillColor = (mi === currentMonth) ? barActive : barColor;
+      fc = (mi === currentMonth) ? barActive : barColor;
     }
-
     var yTop = padT + chartH - barH_px;
     var r = Math.min(4, Math.floor(barW / 2), Math.floor(barH_px / 2));
-
-    // Rounded-top bar
-    ctx.fillStyle = fillColor;
+    ctx.fillStyle = fc;
     ctx.beginPath();
-    ctx.moveTo(bx + r, yTop);
-    ctx.lineTo(bx + barW - r, yTop);
-    ctx.quadraticCurveTo(bx + barW, yTop, bx + barW, yTop + r);
-    ctx.lineTo(bx + barW, padT + chartH);
-    ctx.lineTo(bx, padT + chartH);
-    ctx.lineTo(bx, yTop + r);
-    ctx.quadraticCurveTo(bx, yTop, bx + r, yTop);
-    ctx.closePath();
-    ctx.fill();
-
+    ctx.moveTo(bx+r,yTop); ctx.lineTo(bx+barW-r,yTop);
+    ctx.quadraticCurveTo(bx+barW,yTop,bx+barW,yTop+r);
+    ctx.lineTo(bx+barW,padT+chartH); ctx.lineTo(bx,padT+chartH);
+    ctx.lineTo(bx,yTop+r); ctx.quadraticCurveTo(bx,yTop,bx+r,yTop);
+    ctx.closePath(); ctx.fill();
     // Guest count above bar
     if (monthPax[mi] > 0) {
-      ctx.fillStyle = (mi === currentMonth) ? barActive : labelColor;
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'bottom';
+      ctx.fillStyle = (mi===currentMonth) ? barActive : labelColor;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
       ctx.font = '9px DM Sans,system-ui,sans-serif';
-      ctx.fillText(monthPax[mi], bx + barW / 2, yTop - 2);
+      ctx.fillText(monthPax[mi], bx + barW/2, yTop - 2);
     }
-
-    // Month label below bar
-    ctx.fillStyle = (mi === currentMonth) ? barActive : labelColor;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'top';
-    ctx.font = (mi === currentMonth) ? 'bold 10px DM Sans,system-ui,sans-serif' : '10px DM Sans,system-ui,sans-serif';
-    ctx.fillText(MONTHS[mi], bx + barW / 2, padT + chartH + 5);
+    // 3-letter month name below bar
+    ctx.fillStyle = (mi===currentMonth) ? barActive : labelColor;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+    ctx.font = (mi===currentMonth) ? 'bold 10px DM Sans,system-ui,sans-serif' : '10px DM Sans,system-ui,sans-serif';
+    ctx.fillText(MONTHS[mi], bx + barW/2, padT + chartH + 5);
   }
 
-  // Store hit areas for tooltip
-  canvas._bars = monthPax.map(function(pax, mi) {
-    return {
-      x: padL + mi * gap + Math.floor((gap - barW) / 2),
-      w: barW, pax: pax, tours: monthTours[mi], label: MONTHS[mi]
-    };
+  canvas._bars = monthPax.map(function(pax,mi) {
+    return {x:padL+mi*gap+Math.floor((gap-barW)/2),w:barW,pax:pax,tours:monthTours[mi],label:MONTHS[mi]};
   });
 }
 (function(){
