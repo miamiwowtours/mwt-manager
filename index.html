@@ -340,6 +340,47 @@ tfoot td{background:var(--bg);font-weight:600;}
   <div style="color:#fff;font-size:16px;font-weight:500;" id="loading-msg">Loading...</div>
   <div style="width:40px;height:40px;border:3px solid rgba(255,255,255,0.2);border-top-color:#4dd9a8;border-radius:50%;animation:spin 0.8s linear infinite;"></div>
 </div>
-<script src="https://miamiwowtours.github.io/mwt-manager/app.js?v=20"></script>
+<script src="https://miamiwowtours.github.io/mwt-manager/app.js"></script>
+
+<script>
+window.addEventListener('load', function() {
+  function renderAttendanceChartFixed() {
+    var canvas = document.getElementById('attendance-chart');
+    if (!canvas) return;
+    var parent = canvas.parentElement;
+    var W = (parent ? parent.clientWidth - 40 : 0) || 800;
+    var H = 220; canvas.width = W; canvas.height = H;
+    canvas.style.width = W+'px'; canvas.style.height = H+'px';
+    var ctx = canvas.getContext('2d');
+    var monthPax=[],monthTours=[]; for(var i=0;i<12;i++){monthPax.push(0);monthTours.push(0);}
+    if(typeof tours !== 'undefined') tours.forEach(function(t){var mo=new Date(t.date+'T00:00:00').getMonth();monthPax[mo]+=(t.pax||t.totalPax||0);monthTours[mo]++;});
+    var maxPax=Math.max.apply(null,monthPax)||1;
+    var padL=8,padR=8,padT=18,padB=24,chartW=W-padL-padR,chartH=H-padT-padB;
+    var gap=Math.floor(chartW/12),barW=Math.max(8,Math.floor(gap*0.65));
+    ctx.clearRect(0,0,W,H);
+    var lc='rgba(0,0,0,0.45)',bc='#4dd9a8',ba='#2cb888',zc='rgba(0,0,0,0.08)';
+    var MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var cur=new Date().getMonth();
+    for(var mi=0;mi<12;mi++){
+      var bx=padL+mi*gap+Math.floor((gap-barW)/2),bh,fc;
+      if(monthPax[mi]===0){bh=2;fc=zc;}else{bh=Math.max(4,Math.round(chartH*monthPax[mi]/maxPax));fc=mi===cur?ba:bc;}
+      var yt=padT+chartH-bh,r=Math.min(4,Math.floor(barW/2),Math.floor(bh/2));
+      ctx.fillStyle=fc;
+      ctx.beginPath();ctx.moveTo(bx+r,yt);ctx.lineTo(bx+barW-r,yt);
+      ctx.quadraticCurveTo(bx+barW,yt,bx+barW,yt+r);
+      ctx.lineTo(bx+barW,padT+chartH);ctx.lineTo(bx,padT+chartH);
+      ctx.lineTo(bx,yt+r);ctx.quadraticCurveTo(bx,yt,bx+r,yt);
+      ctx.closePath();ctx.fill();
+      if(monthPax[mi]>0){ctx.fillStyle=mi===cur?ba:lc;ctx.textAlign='center';ctx.textBaseline='bottom';ctx.font='9px DM Sans,sans-serif';ctx.fillText(monthPax[mi],bx+barW/2,yt-2);}
+      ctx.fillStyle=mi===cur?ba:lc;ctx.textAlign='center';ctx.textBaseline='top';
+      ctx.font=mi===cur?'bold 10px DM Sans,sans-serif':'10px DM Sans,sans-serif';
+      ctx.fillText(MONTHS[mi],bx+barW/2,padT+chartH+5);
+    }
+    canvas._bars=monthPax.map(function(p,mi){return{x:padL+mi*gap+Math.floor((gap-barW)/2),w:barW,pax:p,tours:monthTours[mi],label:MONTHS[mi]};});
+  }
+  renderAttendanceChart = renderAttendanceChartFixed;
+  setTimeout(renderAttendanceChartFixed, 800);
+});
+</script>
 </body>
 </html>
