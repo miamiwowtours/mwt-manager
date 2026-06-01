@@ -296,15 +296,15 @@ function renderAttendanceChart() {
   ctx.clearRect(0, 0, W, H);
 
   // Y-axis grid lines + guest count labels on left
-  var labelColor = 'rgba(255,255,255,0.55)';
-  var gridColor  = 'rgba(255,255,255,0.08)';
+  var labelColor = 'rgba(0,0,0,0.50)';
+  var gridColor  = 'rgba(0,0,0,0.08)';
   ctx.font = '10px DM Sans,system-ui,sans-serif';
   ctx.textAlign = 'right';
   ctx.textBaseline = 'middle';
   for (var gi = 0; gi <= 4; gi++) {
     var yVal = Math.round(maxPax * gi / 4);
     var yPos = padT + chartH - Math.round(chartH * gi / 4);
-    ctx.strokeStyle = gi === 0 ? 'rgba(255,255,255,0.15)' : gridColor;
+    ctx.strokeStyle = gi === 0 ? 'rgba(0,0,0,0.15)' : gridColor;
     ctx.lineWidth = 0.75;
     ctx.beginPath();
     ctx.moveTo(padL, yPos);
@@ -316,7 +316,7 @@ function renderAttendanceChart() {
   var currentMonth = new Date().getMonth();
   var barColor  = '#4dd9a8';
   var barActive = '#7ee8c8';
-  var zeroColor = 'rgba(255,255,255,0.10)';
+  var zeroColor = 'rgba(0,0,0,0.08)';
 
   for (var mi = 0; mi < 12; mi++) {
     var bx = padL + mi * gap + Math.floor((gap - barW) / 2);
