@@ -169,6 +169,11 @@ tfoot td{background:var(--bg);font-weight:600;}
       <div class="field"><label>Booking channel</label><select id="f-channel" onchange="calcTour()"><option value="Fareharbor">Fareharbor (2.9%)</option><option value="TripAdvisor">TripAdvisor (32%)</option><option value="Airbnb">Airbnb (20%)</option><option value="GYG">GetYourGuide (25%)</option><option value="Civitatis">Civitatis (25%)</option></select></div>
       <div class="field"><label>Other expenses ($)</label><input type="number" id="f-expenses" min="0" value="0" oninput="calcTour()" placeholder="0"></div>
     </div>
+    <div class="form-grid g2">
+      <div class="field"><label>Adult price override ($)</label><input type="number" id="f-adult-override" min="0" step="0.01" oninput="calcTour()" placeholder="standard"></div>
+      <div class="field"><label>Child price override ($)</label><input type="number" id="f-child-override" min="0" step="0.01" oninput="calcTour()" placeholder="standard"></div>
+    </div>
+    <div style="font-size:12px;color:var(--text3);margin:-4px 0 12px;">Leave blank for standard pricing. Use these only for bookings made at a different (e.g. old) price.</div>
     <div class="field" style="margin-bottom:12px;"><label>Notes (optional)</label><input type="text" id="f-notes" placeholder="e.g. great group..."></div>
     <div class="calc-box">
       <div class="calc-label">Breakdown</div>
@@ -301,6 +306,10 @@ tfoot td{background:var(--bg);font-weight:600;}
       <div class="field"><label id="em-adults-label">Adults ($62)</label><input type="number" id="em-adults" min="0" oninput="previewEdit()"></div>
       <div class="field"><label id="em-children-label">Children ($47)</label><input type="number" id="em-children" min="0" oninput="previewEdit()"></div>
       <div class="field"><label>Under 7 (free)</label><input type="number" id="em-infants" min="0" oninput="previewEdit()"></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div class="field"><label>Adult price override ($)</label><input type="number" id="em-adult-override" min="0" step="0.01" oninput="previewEdit()" placeholder="standard"></div>
+      <div class="field"><label>Child price override ($)</label><input type="number" id="em-child-override" min="0" step="0.01" oninput="previewEdit()" placeholder="standard"></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
       <div class="field"><label>Other expenses ($)</label><input type="number" id="em-expenses" min="0" value="0" oninput="previewEdit()" placeholder="0.00" step="0.01"></div>
